@@ -1,0 +1,27 @@
+@layer utilities {
+  /* 公共雪碧图基类 */
+  .sprite-icon {
+    display: inline-block;
+    width: 30px;    /* 单个图标宽度 */
+    height: 30px;   /* 单个图标高度 */
+    background-image: url("~assets/images/chart.png"); /* 你的雪碧图路径 */
+    background-repeat: no-repeat;
+    vertical-align: middle;
+    background-size: 100%;
+  }
+
+  /* 图标1 */
+  .sprite-1 {
+    background-position: 0 0;
+  }
+
+  /* 图标2 */
+  .sprite-2 {
+    background-position: 0 -32px;
+  }
+
+  /* 图标3 */
+  .sprite-3 {
+    background-position: 0px -63.6px;
+  }
+}
