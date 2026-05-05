@@ -8,6 +8,10 @@ export const routes = createRouter({
         {
             path:"/",
             component: ()=>import("~/views/Home.vue")
+        },
+        {
+            path:"/login",
+            component:()=>import("~/views/Login.vue")
         }
     ]
 })
