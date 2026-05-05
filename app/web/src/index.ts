@@ -14,7 +14,7 @@ import 'virtual:svg-icons-register';
 
 const app = createApp(App);
 app.use(createApp);
-app.use(createPinia);
+app.use(createPinia());
 app.use(ElementPlus);
 app.use(routes)
 
