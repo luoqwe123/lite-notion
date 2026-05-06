@@ -74,15 +74,15 @@ import type { FormInstance, FormRules } from 'element-plus';
 const props = withDefaults(defineProps<{
   checkRule?: {
     email: {
-      message?:Record<string,string>
-      pattern?:RegExp
+      message?: Record<string, string>
+      pattern?: RegExp
 
     },
     pass: {
-      maxlength:number
+      maxlength: number
       minlength: number
-      pattern?:RegExp
-      message?:Record<string,string>
+      pattern?: RegExp
+      message?: Record<string, string>
     }
   }
 }>(), {
@@ -98,10 +98,10 @@ const props = withDefaults(defineProps<{
       },
       pass: {
         minlength: 6,
-        maxlength:16,
+        maxlength: 16,
         pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,16}$/,
         message: {
-          
+
           pattern: '密码必须包含字母和数字'
         }
       }
@@ -144,21 +144,29 @@ function validateEmail(rules: any, value: any, callback: any) {
   if (value === "") {
     callback(new Error("邮箱不能为空！"))
   }
-  
+
   if (!email.pattern?.test(value)) {
     callback(new Error(`${email.message?.pattern}`))
   }
   callback();
 }
-
-function submit(){
+import { request } from '~/utils/request';
+async function submit() {
   const formEl = ruleFormRef.value
-  formEl?.validate((valid)=>{
-    console.log(valid)
-    if(valid){
-      formEl.resetFields()
+  let res = await request.post("/login", {
+    body: {
+      email: 12312,
+      password: 1232132
     }
   })
+  console.log(res)
+  // formEl?.validate( (valid)=>{
+  //   console.log(valid)
+  //   if(valid){
+
+  //     formEl.resetFields()
+  //   }
+  // })
 }
 
 const isRegister = computed(() => {
