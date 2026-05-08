@@ -5,7 +5,7 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
+ 
 }
 
 datasource db {
@@ -15,8 +15,228 @@ datasource db {
 
 
 // 导入所有模块
-import "./user.prisma"
-import "./team.prisma"
-import "./knowledge.prisma"
-import "./document.prisma"
-import "./log.prisma"
+
+// 1. 用户表
+model User {
+  id              BigInt    @id @default(autoincrement())
+  email           String    @unique
+  password        String
+  nickname        String
+  avatar          String?
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @default(now()) @updatedAt @map("updated_at")
+
+  teams           Team[]            @relation("TeamOwner")
+  teamMembers     TeamMember[]
+  documents       Document[]        @relation("DocumentCreator")
+  updatedDocs     Document[]        @relation("DocumentUpdater")
+  versions        DocumentVersion[]
+  docPermissions  DocumentPermission[]
+  favorites       Favorite[]
+  aiLogs          AiLog[]
+  importLogs      ImportsLog[]
+
+  @@map("users")
+}
+
+
+
+
+
+// 7. 全局权限表
+model Permission {
+  id              BigInt   @id @default(autoincrement())
+  role            Role
+  canCreate       Int      @default(0) @map("can_create")
+  canEdit         Int      @default(0) @map("can_edit")
+  canDelete       Int      @default(0) @map("can_delete")
+  canManageMember Int      @default(0) @map("can_manage_member")
+
+  @@map("permissions")
+}
+
+// 8. 文档独立权限
+model DocumentPermission {
+  id            BigInt     @id @default(autoincrement())
+  documentId    BigInt     @map("document_id")
+  userId        BigInt     @map("user_id")
+  permission    DocPerm
+  expireAt      DateTime?  @map("expire_at")
+
+  document      Document   @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  user          User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([documentId, userId])
+  @@map("document_permissions")
+}
+
+
+
+// 9. 收藏表
+model Favorite {
+  id          BigInt   @id @default(autoincrement())
+  userId      BigInt   @map("user_id")
+  documentId  BigInt   @map("document_id")
+  tags        Json?
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  user        User     @relation(fields: [userId], references: [id])
+  document    Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, documentId])
+  @@map("favorites")
+}
+
+
+
+enum DocPerm {
+  view
+  edit
+}
+enum Role {
+  admin
+  editor
+  viewer
+}
+
+
+// 2. 团队表
+model Team {
+  id              BigInt    @id @default(autoincrement())
+  name            String
+  description     String?
+  avatar          String?
+  ownerId         BigInt    @map("owner_id")
+  createdAt       DateTime  @default(now()) @map("created_at")
+
+  owner           User              @relation("TeamOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  members         TeamMember[]
+  knowledgeBases  KnowledgeBase[]
+
+  @@map("teams")
+}
+// 3. 团队成员（多对多）
+model TeamMember {
+  id        BigInt    @id @default(autoincrement())
+  teamId    BigInt    @map("team_id")
+  userId    BigInt    @map("user_id")
+  role      Role      @default(viewer)
+  joinedAt  DateTime  @default(now()) @map("joined_at")
+
+  team      Team    @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([teamId, userId])
+  @@map("team_members")
+}
+
+
+// 4. 知识库
+model KnowledgeBase {
+  id          BigInt    @id @default(autoincrement())
+  name        String
+  teamId      BigInt    @map("team_id")
+  sort        Int       @default(0)
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  team        Team      @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  documents   Document[]
+  importLogs  ImportsLog[]
+
+  @@map("knowledge_bases")
+}
+
+
+// 5. 文档表（核心）
+model Document {
+  id          BigInt        @id @default(autoincrement())
+  title       String
+  content     String?
+  kbId        BigInt        @map("kb_id")
+  teamId      BigInt        @map("team_id")
+  parentId    BigInt?       @map("parent_id")
+  level       Int           @default(1)
+  createdBy   BigInt        @map("created_by")
+  updatedBy   BigInt?       @map("updated_by")
+  status      DocStatus     @default(normal)
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @default(now()) @updatedAt @map("updated_at")
+
+  creator          User                  @relation("DocumentCreator", fields: [createdBy], references: [id])
+  updater          User?                 @relation("DocumentUpdater", fields: [updatedBy], references: [id])
+  kb               KnowledgeBase         @relation(fields: [kbId], references: [id], onDelete: Cascade)
+  versions         DocumentVersion[]
+  permissions      DocumentPermission[]
+  favorites        Favorite[]
+  aiLogs           AiLog[]
+
+  @@index([kbId], name: "idx_kb")
+  @@index([teamId], name: "idx_team")
+  @@map("documents")
+}
+
+
+
+// 6. 文档版本
+model DocumentVersion {
+  id            BigInt    @id @default(autoincrement())
+  documentId    BigInt    @map("document_id")
+  content       String
+  versionNum    Int       @map("version_num")
+  createdBy     BigInt    @map("created_by")
+  createdAt     DateTime  @default(now()) @map("created_at")
+
+  document      Document  @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  creator       User      @relation(fields: [createdBy], references: [id])
+
+  @@index([documentId], name: "idx_doc")
+  @@map("document_versions")
+}
+enum DocStatus {
+  normal
+  recycle
+}
+
+// 10. AI 日志
+model AiLog {
+  id          BigInt   @id @default(autoincrement())
+  userId      BigInt   @map("user_id")
+  documentId  BigInt?  @map("document_id")
+  action      AiAction
+  content     String
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  user        User     @relation(fields: [userId], references: [id])
+  document    Document? @relation(fields: [documentId], references: [id])
+
+  @@map("ai_logs")
+}
+
+enum AiAction {
+  summary
+  translate
+  rewrite
+  outline
+  explain
+}
+
+// 11. 文件导入日志
+model ImportsLog {
+  id          BigInt        @id @default(autoincrement())
+  userId      BigInt        @map("user_id")
+  kbId        BigInt        @map("kb_id")
+  fileName    String        @map("file_name")
+  fileType    String        @map("file_type")
+  status      ImportStatus
+  createdAt   DateTime      @default(now()) @map("created_at")
+
+  user        User          @relation(fields: [userId], references: [id])
+  kb          KnowledgeBase @relation(fields: [kbId], references: [id])
+
+  @@map("imports_logs")
+}
+
+enum ImportStatus {
+  success
+  fail
+}

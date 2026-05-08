@@ -1,9 +1,8 @@
 {
   "compilerOptions": {
     "strict": true,
-    "module": "NodeNext",
-    "moduleResolution": "nodenext",
-    "resolvePackageJsonExports": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
     "esModuleInterop": true,
     "ignoreDeprecations": "6.0",
     "isolatedModules": true,
@@ -12,7 +11,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "target": "esnext",
+    "target": "es2021",
     "sourceMap": true,
     "outDir": "./dist",
     "incremental": true,
@@ -21,6 +20,6 @@
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": false,
     "strictBindCallApply": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
   }
 }

@@ -14,6 +14,7 @@
   "license": "ISC",
   "packageManager": "pnpm@10.30.3",
   "devDependencies": {
+    "prisma-merge": "^0.2.0",
     "typescript": "^6.0.3"
   },
   "dependencies": {
