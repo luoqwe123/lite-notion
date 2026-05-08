@@ -5,10 +5,18 @@
 
 generator client {
   provider = "prisma-client-js"
-  // output   = "../src/generated/prisma"
+  output   = "../generated/prisma"
 }
 
 datasource db {
   provider = "mysql"
 
 }
+
+
+// 导入所有模块
+import "./user.prisma"
+import "./team.prisma"
+import "./knowledge.prisma"
+import "./document.prisma"
+import "./log.prisma"

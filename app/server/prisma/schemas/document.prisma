@@ -1,0 +1,50 @@
+
+// 5. 文档表（核心）
+model Document {
+  id          BigInt        @id @default(autoincrement())
+  title       String
+  content     String?
+  kbId        BigInt        @map("kb_id")
+  teamId      BigInt        @map("team_id")
+  parentId    BigInt?       @map("parent_id")
+  level       Int           @default(1)
+  createdBy   BigInt        @map("created_by")
+  updatedBy   BigInt?       @map("updated_by")
+  status      DocStatus     @default(normal)
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @default(now()) @updatedAt @map("updated_at")
+
+  creator          User                  @relation("DocumentCreator", fields: [createdBy], references: [id])
+  updater          User?                 @relation("DocumentUpdater", fields: [updatedBy], references: [id])
+  kb               KnowledgeBase         @relation(fields: [kbId], references: [id], onDelete: Cascade)
+  versions         DocumentVersion[]
+  permissions      DocumentPermission[]
+  favorites        Favorite[]
+  aiLogs           AiLog[]
+
+  @@index([kbId], name: "idx_kb")
+  @@index([teamId], name: "idx_team")
+  @@map("documents")
+}
+
+
+
+// 6. 文档版本
+model DocumentVersion {
+  id            BigInt    @id @default(autoincrement())
+  documentId    BigInt    @map("document_id")
+  content       String
+  versionNum    Int       @map("version_num")
+  createdBy     BigInt    @map("created_by")
+  createdAt     DateTime  @default(now()) @map("created_at")
+
+  document      Document  @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  creator       User      @relation(fields: [createdBy], references: [id])
+
+  @@index([documentId], name: "idx_doc")
+  @@map("document_versions")
+}
+enum DocStatus {
+  normal
+  recycle
+}

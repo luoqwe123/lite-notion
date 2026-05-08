@@ -1,0 +1,14 @@
+// 4. 知识库
+model KnowledgeBase {
+  id          BigInt    @id @default(autoincrement())
+  name        String
+  teamId      BigInt    @map("team_id")
+  sort        Int       @default(0)
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  team        Team      @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  documents   Document[]
+  importLogs  ImportsLog[]
+
+  @@map("knowledge_bases")
+}
