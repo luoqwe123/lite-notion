@@ -2,6 +2,7 @@
     "compilerOptions":{
         "strict":true,
         "forceConsistentCasingInFileNames":true,
+       
         "paths": {
             "~/*": ["./src/*"],
             "~assets/*":["./src/assets/*"]

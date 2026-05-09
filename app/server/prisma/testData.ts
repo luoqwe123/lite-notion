@@ -64,7 +64,7 @@ export const Permission = [
   {  "role": "viewer", "canCreate": 0, "canEdit": 0, "canDelete": 0, "canManageMember": 0 },
   {  "role": "admin", "canCreate": 1, "canEdit": 1, "canDelete": 1, "canManageMember": 1 }
 ];
-export const  DocumentPermissionPermission = [
+export const  DocumentPermission = [
   {  "documentId": 1, "userId": 2, "permission": "view" },
   {  "documentId": 1, "userId": 3, "permission": "edit" },
   {  "documentId": 2, "userId": 4, "permission": "view" },
