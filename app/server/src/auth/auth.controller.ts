@@ -6,8 +6,14 @@ export class AuthController {
   constructor(private readonly AuthService: AuthService) {}
 
   @Post("login") 
-  login(@Body() data:LoginDto) {
-    console.log(data)
-    return this.AuthService.login();
+  async login(@Body() data:LoginDto) {
+    let res :any
+    if(data.type === "password") {
+      res = await this.AuthService.passwordLogin(data);
+    }else{
+      res = await this.AuthService.codeLogin(data)
+    }
+    return  res;
   }
-}
+  
+} 

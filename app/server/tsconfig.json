@@ -3,6 +3,7 @@
     "strict": true,
     "module": "commonjs",
     "esModuleInterop": true,
+    "moduleResolution": "bundler",  
     "isolatedModules": true,
     "declaration": true,
     "removeComments": true,
@@ -14,13 +15,13 @@
     "outDir": "./dist",
     "incremental": true,
     "skipLibCheck": true,
-    "strictNullChecks": true,
+    "strictNullChecks": false,
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@/":["./src/*"]
+      "@/*": ["./src/*"]
     }
     
   }

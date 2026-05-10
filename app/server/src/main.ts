@@ -1,13 +1,15 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ResponseInterceptor } from './response.inteceptors';
+import { Validate } from '@/common/validate';
 
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.useGlobalPipes(new Validate());
   app.useGlobalInterceptors(new ResponseInterceptor())
   app.setGlobalPrefix('api');
-  app.enableCors()
+  app.enableCors();
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
