@@ -240,3 +240,15 @@ enum ImportStatus {
   success
   fail
 }
+
+// 验证码表
+model VerifyCode {
+  id        Int      @id @default(autoincrement())
+  email     String
+  code      String
+  used      Boolean  @default(false)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@map("verify_codes")
+}
