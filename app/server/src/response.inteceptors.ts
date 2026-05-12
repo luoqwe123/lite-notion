@@ -9,7 +9,7 @@ export class ResponseInterceptor implements NestInterceptor {
         context.switchToHttp().getResponse().statusCode = 200;
         return next.handle().pipe(
             map((data) => {   // data 就是控制器方法实际返回的数据 。
-                console.log("data",data)
+               
                 return data?.meta ?{ code: HttpStatus.OK,meta:data.meta,data:data.data}: {
                     code: HttpStatus.OK,
                     data,

@@ -18,7 +18,7 @@ datasource db {
 
 // 1. 用户表
 model User {
-  id              BigInt    @id @default(autoincrement())
+  id              Int    @id @default(autoincrement())
   email           String    @unique
   password        String
   nickname        String
@@ -45,7 +45,7 @@ model User {
 
 // 7. 全局权限表
 model Permission {
-  id              BigInt   @id @default(autoincrement())
+  id              Int   @id @default(autoincrement())
   role            Role
   canCreate       Int      @default(0) @map("can_create")
   canEdit         Int      @default(0) @map("can_edit")
@@ -57,9 +57,9 @@ model Permission {
 
 // 8. 文档独立权限
 model DocumentPermission {
-  id            BigInt     @id @default(autoincrement())
-  documentId    BigInt     @map("document_id")
-  userId        BigInt     @map("user_id")
+  id            Int     @id @default(autoincrement())
+  documentId    Int    @map("document_id")
+  userId        Int    @map("user_id")
   permission    DocPerm
   expireAt      DateTime?  @map("expire_at")
 
@@ -74,9 +74,9 @@ model DocumentPermission {
 
 // 9. 收藏表
 model Favorite {
-  id          BigInt   @id @default(autoincrement())
-  userId      BigInt   @map("user_id")
-  documentId  BigInt   @map("document_id")
+  id          Int   @id @default(autoincrement())
+  userId      Int   @map("user_id")
+  documentId  Int   @map("document_id")
   tags        Json?
   createdAt   DateTime @default(now()) @map("created_at")
 
@@ -102,11 +102,11 @@ enum Role {
 
 // 2. 团队表
 model Team {
-  id              BigInt    @id @default(autoincrement())
+  id              Int    @id @default(autoincrement())
   name            String
   description     String?
   avatar          String?
-  ownerId         BigInt    @map("owner_id")
+  ownerId         Int    @map("owner_id")
   createdAt       DateTime  @default(now()) @map("created_at")
 
   owner           User              @relation("TeamOwner", fields: [ownerId], references: [id], onDelete: Cascade)
@@ -117,9 +117,9 @@ model Team {
 }
 // 3. 团队成员（多对多）
 model TeamMember {
-  id        BigInt    @id @default(autoincrement())
-  teamId    BigInt    @map("team_id")
-  userId    BigInt    @map("user_id")
+  id        Int    @id @default(autoincrement())
+  teamId    Int    @map("team_id")
+  userId    Int    @map("user_id")
   role      Role      @default(viewer)
   joinedAt  DateTime  @default(now()) @map("joined_at")
 
@@ -133,9 +133,9 @@ model TeamMember {
 
 // 4. 知识库
 model KnowledgeBase {
-  id          BigInt    @id @default(autoincrement())
+  id          Int    @id @default(autoincrement())
   name        String
-  teamId      BigInt    @map("team_id")
+  teamId      Int   @map("team_id")
   sort        Int       @default(0)
   createdAt   DateTime  @default(now()) @map("created_at")
 
@@ -149,15 +149,15 @@ model KnowledgeBase {
 
 // 5. 文档表（核心）
 model Document {
-  id          BigInt        @id @default(autoincrement())
+  id          Int        @id @default(autoincrement())
   title       String
   content     String?
-  kbId        BigInt        @map("kb_id")
-  teamId      BigInt        @map("team_id")
-  parentId    BigInt?       @map("parent_id")
+  kbId        Int        @map("kb_id")
+  teamId      Int        @map("team_id")
+  parentId    Int?       @map("parent_id")
   level       Int           @default(1)
-  createdBy   BigInt        @map("created_by")
-  updatedBy   BigInt?       @map("updated_by")
+  createdBy   Int        @map("created_by")
+  updatedBy   Int?       @map("updated_by")
   status      DocStatus     @default(normal)
   createdAt   DateTime      @default(now()) @map("created_at")
   updatedAt   DateTime      @default(now()) @updatedAt @map("updated_at")
@@ -179,11 +179,11 @@ model Document {
 
 // 6. 文档版本
 model DocumentVersion {
-  id            BigInt    @id @default(autoincrement())
-  documentId    BigInt    @map("document_id")
+  id            Int    @id @default(autoincrement())
+  documentId    Int    @map("document_id")
   content       String
   versionNum    Int       @map("version_num")
-  createdBy     BigInt    @map("created_by")
+  createdBy     Int    @map("created_by")
   createdAt     DateTime  @default(now()) @map("created_at")
 
   document      Document  @relation(fields: [documentId], references: [id], onDelete: Cascade)
@@ -199,9 +199,9 @@ enum DocStatus {
 
 // 10. AI 日志
 model AiLog {
-  id          BigInt   @id @default(autoincrement())
-  userId      BigInt   @map("user_id")
-  documentId  BigInt?  @map("document_id")
+  id          Int   @id @default(autoincrement())
+  userId      Int   @map("user_id")
+  documentId  Int?  @map("document_id")
   action      AiAction
   content     String
   createdAt   DateTime @default(now()) @map("created_at")
@@ -222,9 +222,9 @@ enum AiAction {
 
 // 11. 文件导入日志
 model ImportsLog {
-  id          BigInt        @id @default(autoincrement())
-  userId      BigInt        @map("user_id")
-  kbId        BigInt        @map("kb_id")
+  id          Int        @id @default(autoincrement())
+  userId      Int        @map("user_id")
+  kbId        Int        @map("kb_id")
   fileName    String        @map("file_name")
   fileType    String        @map("file_type")
   status      ImportStatus

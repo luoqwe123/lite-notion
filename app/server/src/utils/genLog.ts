@@ -4,7 +4,7 @@ function getCommonAppender(pathSeg:string) {
     return {
         // 定义一个sql日志出口
         type: "dateFile",
-        filename: path.resolve(__dirname, "logs", `${pathSeg}`, "logging.log"),
+        filename: path.resolve(__dirname, "../../logs", `${pathSeg}`, "logging.log"),
         maxLogSize: 300 * 1024,  // 配置文件的最大字节数
         keepFileExt: true, //保留文件格式
         daysTokeep: 1, // 保留几天内的日志
@@ -21,7 +21,8 @@ log.configure({
             type: "stdout",
             // filename:path.resolve(__dirname,"logs","sql","logging.log"),
         },
-        api: getCommonAppender("api")
+        api: getCommonAppender("api"),
+        email:getCommonAppender("email")
     },
     categories: {
         sql: {

@@ -1,11 +1,11 @@
 import nodemailer from "nodemailer";
 import "dotenv/config";
 import { emailLog } from "./genLog"
+// console.log(process.env)
 
 
-export async function sendMail(targetEmail:string,type:string,random:string) {
+export async function sendMail(targetEmail:string,random:string) {
     try {
-       
         // 创建Nodemailer传输器 SMTP 或者 其他 运输机制
         let transporter = nodemailer.createTransport({
             host: "smtp.163.com", // 第三方邮箱的主机地址
@@ -13,10 +13,9 @@ export async function sendMail(targetEmail:string,type:string,random:string) {
             secure: true, // true for 465, false for other ports
             auth: {
                 user: process.env["PLAT_EMAIL"], // 发送方邮箱的账号
-                pass: process.env["EMAIL_KEY "], // 邮箱授权密码
+                pass: process.env["EMAIL_KEY"], // 邮箱授权密码
             },
         });
-
         // 定义transport对象并发送邮件
         let info = await transporter.sendMail({
             from: `"dazhi 👻" ${process.env["PLAT_EMAIL"]}`, // 发送方邮箱的账号
@@ -47,8 +46,9 @@ export async function sendMail(targetEmail:string,type:string,random:string) {
         });
        
     } catch (error) {
-        emailLog.debug(`${type} ${error}`)
+        emailLog.debug(`${targetEmail} ${error}`)
     }
 
 }
+// sendMail("qwe18173945756@163.com","3242342")
 

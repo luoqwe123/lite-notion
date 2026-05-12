@@ -23,16 +23,17 @@ export class AuthService {
     return this.token(user!)
   }
   async savecode(data: baseDto) {
-    let { email, type } = data;
+    let { email } = data;
     let random = Math.random().toString().slice(-6);
     await this.prisma.verifyCode.create({
       data: {
         email,
         code: random,
-        expiresAt: new Date(Date.now() + 1 * 60 * 1000).toUTCString(),
+        expiresAt: new Date(Date.now() + 3 * 60 * 1000),
       },
     })
-    sendMail(email, type, random);
+
+    sendMail(email, random);
     return {
       message: "success"
     }
@@ -40,8 +41,8 @@ export class AuthService {
 
   async codeLogin(data: LoginDto) {
     let { email, verifycode } = data;
-    let isture = await this.checkCode(email,verifycode);
-    if(isture) {
+    let isture = await this.checkCode(email, verifycode);
+    if (isture) {
       let user = await this.prisma.user.findFirst({
         where: {
           email,
@@ -63,32 +64,52 @@ export class AuthService {
       message: "success"
     }
   }
-  async checkCode(email:string, verifycode:string){
+  async checkCode(email: string, verifycode: string) {
     let code = await this.prisma.verifyCode.findFirst({
       where: {
         email,
-        used: false
+        used: false,
+        code: verifycode,
+        expiresAt: {
+          gt: new Date() // 过期时间 > 当前时间（没过期）
+        }
+      },
+      orderBy: {
+        createdAt: 'desc' // 取最新的一条（最稳妥）
       }
     })
-    if (+code.expiresAt - Date.now() < 0) {
-      throw new BadRequestException("验证码失效")
-    } else if (code.code != verifycode) {
-      throw new BadRequestException("验证码错误")
-    }else{
+
+    if (!code) {
+      throw new BadRequestException("验证码失效或错误")
+    } else {
+      // 验证通过后，标记为已使用
+      await this.prisma.verifyCode.update({
+        where: { id: code.id },
+        data: { used: true }
+      });
       return true;
     }
   }
-  async register(data:registerDto){
-    let { email, verifycode } = data;
-    let  nickname = process.env["USER_NAME"];
-    const  userData = {...data,nickname}
-    let isture = await this.checkCode(email,verifycode);
-    if(isture){
-      let user =  await this.prisma.user.create({
-        data:userData
+  async register(data: registerDto) {
+    let { email, verifycode,password } = data;
+    let nickname = process.env["USER_NAME"];
+  
+    const userData = { email,password, nickname }
+    let isture = await this.checkCode(email, verifycode);
+    if (isture) {
+      let user = await this.prisma.user.findFirst({
+        where: {
+          email
+        }
       })
+      if (!user) {
+        user = await this.prisma.user.create({
+          data: userData
+        })
+      }
+
       return this.token(user);
     }
-    
+
   }
 }
