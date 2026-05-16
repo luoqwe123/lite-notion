@@ -17,7 +17,7 @@ export class AuthService {
         email: data.email
       }
     })
-    if (!(await verify(user?.password!, data.password))) {
+    if (user?.password! != data.password) {
       throw new BadRequestException('密码输入错误')
     }
     return this.token(user!)

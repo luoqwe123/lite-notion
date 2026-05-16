@@ -1,21 +1,7 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
-import { favoriteService } from './favorite.service';
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '@/prisma/prisma.service';
 
-@Controller()
-export class favoriteController {
-  constructor(private readonly favoriteService: favoriteService) {}
-  @Get()
-  getHello( ): string {
-    return 'hello'
-  }
-  create(){
-
-  }
-  find(){
-
-  }
-  delete(){
-
-  }
-  
+@Injectable()
+export class favoriteService {
+     constructor(private prisma: PrismaService,){}
 }

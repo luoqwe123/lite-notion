@@ -97,6 +97,7 @@ enum Role {
   admin
   editor
   viewer
+  creator
 }
 
 
