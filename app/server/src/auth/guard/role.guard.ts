@@ -26,15 +26,15 @@ export class RoleGuard implements CanActivate {
         teamId = +req.params.id;
     }
     const user = req.user ;
-    const methodRoles = this.reflector.get<Role>('roles', context.getHandler())
-    const classRoles = this.reflector.get<Role>('roles', context.getHandler())
+    const methodRoles = this.reflector.get<RoleWeight>('roles', context.getHandler())
+    const classRoles = this.reflector.get<RoleWeight>('roles', context.getHandler())
     const { role } = await this.prisma.teamMember.findFirst({
         where:{
             userId:user.id,
             teamId,
         }
     })
-    let needWeight = Math.max(RoleWeight[methodRoles],RoleWeight[classRoles])
+    let needWeight = Math.max(+methodRoles,+classRoles)
     return RoleWeight[role] >= needWeight;
 
   }
