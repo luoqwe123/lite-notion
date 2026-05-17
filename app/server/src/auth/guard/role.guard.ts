@@ -34,8 +34,8 @@ export class RoleGuard implements CanActivate {
             teamId,
         }
     })
-    let needWeight = Math.max(+methodRoles,+classRoles)
-    return RoleWeight[role] >= needWeight;
+    let needWeight = Math.max(+methodRoles,+classRoles);
+    return RoleWeight[role.toUpperCase()] >= needWeight;
 
   }
 }
