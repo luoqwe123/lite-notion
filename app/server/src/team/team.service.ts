@@ -8,12 +8,12 @@ import { Role } from '@/common/constants';
 export class teamService {
      constructor(private prisma: PrismaService,) { }
      async find(data: BaseDto) {
-          const { id, name, description } = data;
+          const { id, name, description,ownerId } = data;
           return this.prisma.team.findMany({
                where: {
                     // 精确匹配 id
-                    ...(id && { id }),
-
+                    ...(id && { id:+id }),
+                    ...(ownerId && { ownerId:+ownerId }),
                     // 模糊匹配 name
                     ...(name && {
                          name: { contains: name },
@@ -31,16 +31,15 @@ export class teamService {
           let team = await this.prisma.team.create({
                data: {
                     ownerId: userId,
-                    ...data
+                    ...data,
+                    members: {
+                         create: {
+                              userId,
+                              role: Role.CREATOR,
+                         }
+                    }
                }
           });
-          await this.prisma.teamMember.create({
-               data: {
-                    teamId: team.id,
-                    userId,
-                    role: Role.CREATOR
-               }
-          })
           return team;
 
      }
@@ -54,13 +53,14 @@ export class teamService {
           })
      }
      async delete(id: number) {
+
           return this.prisma.team.delete({
                where: {
                     id
                }
           })
      }
-     findAll(){
+     findAll() {
           return this.prisma.team.findMany()
 
      }

@@ -4,6 +4,8 @@ import { ExtractJwt,Strategy } from "passport-jwt";
 import { PassportStrategy } from "@nestjs/passport"
 import  { ConfigService } from "@nestjs/config"
 
+// 校验请求头是否有token ，并解析token，将user信息放到request中
+
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     constructor(configServicec: ConfigService) {

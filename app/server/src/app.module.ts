@@ -5,9 +5,10 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { PrismaModule } from './prisma/prisma.module';
 import { workspaceModule } from './workspace/workspace.module';
+import { teamModule } from './team/team.module';
 
 @Module({
-  imports: [AuthModule,PrismaModule,workspaceModule,ConfigModule.forRoot({
+  imports: [AuthModule,PrismaModule,workspaceModule,teamModule,ConfigModule.forRoot({
     isGlobal: true
   })],
   controllers: [AppController],

@@ -2,9 +2,9 @@
 
 
 export default class BaseDto{
-    id:number;
+    id:string;
     name:string;
-    ownerId:number;
+    ownerId:string;
     description:string;
 
 }
