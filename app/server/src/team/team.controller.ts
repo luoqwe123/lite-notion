@@ -21,8 +21,8 @@ export class teamController {
   
   @Delete(":id")
   @roleWeight(RoleWeight.CREATOR)
-  delete(@Param("id") id:string){
-    return this.teamService.delete(+id);
+  delete(@Request() req,@Param("id") id:string){
+    return this.teamService.delete(+id,+req.user.id);
   }
   @Patch(":id")
   @roleWeight(RoleWeight.CREATOR)
@@ -30,7 +30,8 @@ export class teamController {
     return this.teamService.update(+id,data);
   }
   @Get()
-  find(@Query() data:BaseDto){
+  find(@Request() req,@Query() data:BaseDto){
+    data.ownerId = req.user.id
     return this.teamService.find(data)
   }
   // @Get("findAll")

@@ -1,11 +1,48 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
+import { baseDto, commonDto, findDto,  } from './dto/common.dto';
+import { idToNum } from '@/utils/idToNum';
 
 @Injectable()
 export class workspaceService {
      constructor(private readonly prisma:PrismaService){}
-     createSpace(){
-          
+     create(data:commonDto){
+          return this.prisma.knowledgeBase.create({
+               data:{
+                    teamId:+data.teamId,
+                    name:data.name
+               }
+          })
+     }
+     delete(id:number,userId:number){
+          return this.prisma.knowledgeBase.delete({
+               where:{
+                    id,
+                    userId
+               }
+          })
+     }
+     update(id:number,data:commonDto){
+          return this.prisma.knowledgeBase.update({
+               where:{
+                    id
+               },
+               data:{
+                    name:data.name
+               }
+          })
+     }
+     find(data:findDto){
+          return this.prisma.knowledgeBase.findMany({
+               where:{
+                    ...idToNum({...data}),
+                    ...(data.name&&{
+                         name:{
+                              contains:data.name
+                         }
+                    })
+               }
+          })
      }
 
 }
