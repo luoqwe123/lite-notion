@@ -52,12 +52,12 @@ export class teamService {
 
           })
      }
-     async delete(id: number,userId:number) {
+     async delete(id: number) {
 
           return this.prisma.team.delete({
                where: {
                     id,
-                    userId
+                   
                }
           })
      }

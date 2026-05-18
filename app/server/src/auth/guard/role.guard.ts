@@ -21,7 +21,7 @@ export class RoleGuard implements CanActivate {
     const reqMethod = req.method;
     let teamId:number;
     if(reqMethod.toLowerCase() === "post"){
-        teamId = req.body.id;
+        teamId = +req.body.id;
     }else{
         teamId = +req.params.id;
     }

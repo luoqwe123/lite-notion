@@ -14,11 +14,11 @@ export class workspaceService {
                }
           })
      }
-     delete(id:number,userId:number){
+     delete(id:number){
           return this.prisma.knowledgeBase.delete({
                where:{
                     id,
-                    userId
+                   
                }
           })
      }

@@ -10,7 +10,7 @@ export class favoriteService {
                data: {
                     userId: +data.userId,
                     documentId: +data.documentId,
-                    tag: data.tag
+                    tags: data.tag
                }
           })
      }

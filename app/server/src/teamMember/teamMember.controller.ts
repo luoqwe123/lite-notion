@@ -5,9 +5,10 @@ import { baseDto, memberDto } from './dto/common.dto';
 import { JwtAuthGuard } from '@/auth/guard/auth.guard';
 import { roleWeight } from '@/auth/decorator/role.decorator';
 import { RoleWeight } from '@/common/constants';
+import { createTeamGuard } from '@/auth/guard/member.guard';
 
 
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard,createTeamGuard("teamMember",{exclude:["create"]}))
 @Controller("teamMember")
 export class teamMemberController {
   constructor(private readonly teamMemberService: teamMemberService) {}

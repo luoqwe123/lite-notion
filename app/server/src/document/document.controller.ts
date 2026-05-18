@@ -4,9 +4,10 @@ import { JwtAuthGuard } from '@/auth/guard/auth.guard';
 import { roleWeight } from '@/auth/decorator/role.decorator';
 import { RoleWeight } from '@/common/constants';
 import { createDto, deleteDto, findDto, updateDto } from './dto/common.dto';
+import { createTeamGuard } from '@/auth/guard/member.guard';
 
 
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard,createTeamGuard("document",{exclude:["create"]}))
 @Controller("document")
 export class documentController {
   constructor(private readonly documentService: documentService) {}
