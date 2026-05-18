@@ -12,3 +12,5 @@ export enum RoleWeight {
     EDITOR = "30",
     VIEWER = "20"
 }
+
+export type DocumentStatus  = "normal"| "recycle"

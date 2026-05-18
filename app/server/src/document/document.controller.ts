@@ -1,24 +1,39 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { documentService } from './document.service';
+import { JwtAuthGuard } from '@/auth/guard/auth.guard';
+import { roleWeight } from '@/auth/decorator/role.decorator';
+import { RoleWeight } from '@/common/constants';
+import { createDto, deleteDto, findDto, updateDto } from './dto/common.dto';
 
-@Controller()
+
+@UseGuards(JwtAuthGuard)
+@Controller("document")
 export class documentController {
   constructor(private readonly documentService: documentService) {}
+
+  @Post("create")
+  @roleWeight(RoleWeight.EDITOR)
+  create(@Body() data:createDto){
+    return this.documentService.create(data)
+  }
+
   @Get()
-  getHello( ): string {
-    return 'hello'
+  find(@Query() data:findDto){
+    return this.documentService.find(data)
   }
-  create(){
-
+  @Patch()
+  @roleWeight(RoleWeight.EDITOR)
+  update(@Body() data:updateDto){
+    return this.documentService.update(data)
   }
-  find(){
-
+  @Delete()
+  @roleWeight(RoleWeight.ADMIN)
+  delete(@Query() data:deleteDto){
+    return this.documentService.delete(data)
   }
-  update(){
-
-  }
-  delete(){
-    
+  @Get(":id")
+  findOne(@Param("id") id:string){
+    return this.documentService.findOne(+id)
   }
 
 }
