@@ -1,7 +1,7 @@
 {
   "name": "lite-notion",
   "version": "1.0.0",
-  "description": "",
+  "description": "这个是极简化版的协作知识库，只支持富文本编辑",
   "main": "index.js",
   "type": "module",
   "scripts": {
