@@ -1,17 +1,18 @@
 import { PrismaService } from '@/prisma/prisma.service';
 import type { User } from '@prisma/client';
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable, BadRequestException, Res } from '@nestjs/common';
 import { JwtService } from "@nestjs/jwt"
 import LoginDto, { baseDto } from './dto/login.dto';
 import { verify } from 'argon2';
 import { sendMail } from '@/utils/sendMail';
 import registerDto from './dto/register.dto';
-
+import type { Response } from 'express';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
-  constructor(private prisma: PrismaService, private jwt: JwtService) { }
-  async passwordLogin(data: LoginDto) {
+  constructor(private prisma: PrismaService, private jwt: JwtService,private config:ConfigService) { }
+  async passwordLogin(data: LoginDto, res: Response) {
     const user = await this.prisma.user.findUnique({
       where: {
         email: data.email
@@ -20,7 +21,7 @@ export class AuthService {
     if (user?.password! != data.password) {
       throw new BadRequestException('密码输入错误')
     }
-    return this.token(user!)
+    return this.token(user!, res)
   }
   async savecode(data: baseDto) {
     let { email } = data;
@@ -39,7 +40,7 @@ export class AuthService {
     }
   }
 
-  async codeLogin(data: LoginDto) {
+  async codeLogin(data: LoginDto, res: Response) {
     let { email, verifycode } = data;
     let isture = await this.checkCode(email, verifycode);
     if (isture) {
@@ -48,17 +49,26 @@ export class AuthService {
           email,
         }
       })
-      return this.token(user)
+      return this.token(user, res)
     }
   }
-  async token(user: User) {
+  async token(user: User, res: Response) {
     let { email, id, avatar, nickname } = user;
-    return {
-      token: await this.jwt.signAsync({
-        email,
-        id,
+    let token = await this.jwt.signAsync({
+      email,
+      id,
 
-      }),
+    });
+    // 2. 直接写入 Cookie（核心！）
+    res.cookie('token', token, {
+      httpOnly: true, // 🔥 JS 永远拿不到，防 XSS
+      secure: process.env.NODE_ENV === 'production', // 生产环境 HTTPS
+      sameSite: 'strict', // 🔥 防 CSRF
+      maxAge: this.config.get("TOKEN_EXPIRES_IN") * 24 * 60 * 60 * 1000, // 3天过期
+      path: '/',
+    });
+    return {
+      email,
       avatar,
       username: nickname,
       message: "success"
@@ -90,11 +100,11 @@ export class AuthService {
       return true;
     }
   }
-  async register(data: registerDto) {
-    let { email, verifycode,password } = data;
+  async register(data: registerDto, res: Response) {
+    let { email, verifycode, password } = data;
     let nickname = process.env["USER_NAME"];
-  
-    const userData = { email,password, nickname }
+
+    const userData = { email, password, nickname }
     let isture = await this.checkCode(email, verifycode);
     if (isture) {
       let user = await this.prisma.user.findFirst({
@@ -108,7 +118,7 @@ export class AuthService {
         })
       }
 
-      return this.token(user);
+      return this.token(user, res);
     }
 
   }

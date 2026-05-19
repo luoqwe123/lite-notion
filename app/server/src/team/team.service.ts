@@ -61,8 +61,12 @@ export class teamService {
                }
           })
      }
-     findAll() {
-          return this.prisma.team.findMany()
+     findAll(userId:number) {
+          return this.prisma.team.findMany({
+               where:{
+                    ownerId:userId
+               }
+          })
 
      }
 

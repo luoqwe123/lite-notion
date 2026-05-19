@@ -35,9 +35,10 @@ export class teamController {
     data.ownerId = req.user.id
     return this.teamService.find(data)
   }
-  // @Get("findAll")
-  // findAll(){
-  //   return this.teamService.findAll();
-  // }
+  @Get("findAll")
+  findAll(@Request() req){
+    let id = req.user.id;
+    return this.teamService.findAll(+id);
+  }
 
 }

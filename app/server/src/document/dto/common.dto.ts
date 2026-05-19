@@ -24,6 +24,7 @@ export class deleteDto extends baseDto {
 }
 
 export class findDto extends baseDto {
+    id:string
     @IsNotEmpty({ message: "空间id不能为空" })
     kbId: string
 

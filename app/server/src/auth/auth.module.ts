@@ -5,6 +5,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule,ConfigService } from  "@nestjs/config"
 import { JwtStrategy } from './strategy/jwt.strategy';
 import { JwtAuthGuard } from './guard/auth.guard';
+
 @Module({
   imports: [JwtModule.registerAsync({
     imports:[ConfigModule],
@@ -12,7 +13,7 @@ import { JwtAuthGuard } from './guard/auth.guard';
     useFactory:(config:ConfigService)=>{
         return { 
           secret:config.get("TOKEN_SECRET"),
-          signOptions:{ expiresIn: '3d'}
+          signOptions:{ expiresIn: `${config.get("TOKEN_EXPIRES_IN")}d`}
         }
     }
   })],
