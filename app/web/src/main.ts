@@ -9,7 +9,9 @@ import { routes } from "./routes";
 import ElementPlus from "element-plus";
 import "element-plus/dist/index.css";
 // import 'element-plus/theme-chalk/dark/css-vars.css'
+import "~assets/style/tailwind.css"
 import "~assets/style/main.scss";
+
 import 'virtual:svg-icons-register';
 import { useThemeStore } from './stores/modules/themeStore'; // Import theme store
 

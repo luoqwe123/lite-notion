@@ -1,6 +1,6 @@
 <template>
-  <div class="loginFrom-container flex flex-col items-center shadow-login rounded-2xl
-    pt-16 gap-6
+  <div class="loginFrom-container flex flex-col items-center shadow-login rounded-2xl justify-center
+     gap-6
   ">
     <!-- 标题 -->
     <div

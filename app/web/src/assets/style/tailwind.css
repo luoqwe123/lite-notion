@@ -1,16 +1,2 @@
+
 @import "tailwindcss";
-@import "./utilities/sprite-cions.css";
-
-@utility shadow-login {
-    box-shadow: 0 4px 8px -4px rgba(0, 0, 0, .13), 0 6px 16px rgba(0, 0, 0, .08), 0 12px 24px 16px rgba(0, 0, 0, .04);
-}
-
-@utility split-line-left {
-    background-image: linear-gradient(243deg, #d8dad9 0%, rgba(216, 218, 217, 0) 95%);
-    
-}
-@utility split-line-right {
-    background-image: linear-gradient(117deg, #d8dad9 0%, rgba(216, 218, 217, 0) 95%);
-    
-}
-
