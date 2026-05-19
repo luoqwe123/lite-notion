@@ -1,12 +1,27 @@
 {
-    "compilerOptions":{
-        "strict":true,
-        "forceConsistentCasingInFileNames":true,
-       
+    "compilerOptions": {
+        "strict": true,
+        "forceConsistentCasingInFileNames": true,
+        "ignoreDeprecations": "6.0",
+        "baseUrl": ".",
         "paths": {
-            "~/*": ["./src/*"],
-            "~assets/*":["./src/assets/*"]
-        },
-       
-    }
+            "~/*": [
+                "./src/*"
+            ],
+            "~assets/*": [
+                "./src/assets/*"
+            ]
+        }
+    },
+    "include": [
+        "src/**/*.ts",
+        "src/**/*.tsx",
+        "src/**/*.vue",
+        "src/**/*.d.ts"
+    ],
+    "references": [
+        {
+            "path": "./tsconfig.node.json"
+        }
+    ]
 }

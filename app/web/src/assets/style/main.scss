@@ -1,0 +1,23 @@
+// app/web/src/assets/style/main.scss
+
+// 导入 Tailwind CSS
+@import "./tailwind.scss";
+
+// 导入基础样式
+@import "./base/_variables.scss";
+// @import "./base/_reset.scss"; // 如果有 reset 样式，可以在这里导入
+// @import "./base/_fonts.scss"; // 如果有字体导入，可以在这里导入
+
+// 导入自定义工具类
+@import "./utilities/_custom-shadows.scss";
+@import "./utilities/_split-lines.scss";
+@import "./utilities/_sprite-icons.scss";
+
+// 导入组件样式（如果存在）
+// @import "./components/_button.scss";
+
+// 导入布局样式（如果存在）
+// @import "./layouts/_header.scss";
+
+// 导入页面样式（如果存在）
+// @import "./pages/_home.scss";

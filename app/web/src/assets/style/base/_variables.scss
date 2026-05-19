@@ -1,0 +1,19 @@
+// app/web/src/assets/style/base/_variables.scss
+
+:root {
+  // Light Theme Variables
+  --color-primary: #42b883;
+  --color-text-default: #333;
+  --color-background-default: #ffffff;
+  --color-border-default: #e2e8f0;
+  // Add more light theme variables as needed
+}
+
+.dark {
+  // Dark Theme Variables
+  --color-primary: #66cc99;
+  --color-text-default: #e2e8f0;
+  --color-background-default: #1a202c;
+  --color-border-default: #4a5568;
+  // Add more dark theme variables as needed
+}

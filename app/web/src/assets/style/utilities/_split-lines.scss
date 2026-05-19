@@ -1,0 +1,9 @@
+// app/web/src/assets/style/utilities/_split-lines.scss
+@layer utilities {
+    .split-line-left {
+        background-image: linear-gradient(243deg, #d8dad9 0%, rgba(216, 218, 217, 0) 95%);
+    }
+    .split-line-right {
+        background-image: linear-gradient(117deg, #d8dad9 0%, rgba(216, 218, 217, 0) 95%);
+    }
+}
