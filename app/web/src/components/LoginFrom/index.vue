@@ -1,10 +1,9 @@
 <template>
-  <div class="loginFrom-container flex flex-col items-center shadow-login rounded-2xl justify-center
-     gap-6
-  ">
+  <div class="loginFrom-container flex flex-col items-center shadow-login rounded-2xl justify-center gap-6
+       bg-(--color-background-card) border border-(--color-border-default) transition-colors duration-300">
     <!-- 标题 -->
     <div
-      class="title text-4xl font-bold tracking-wide bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
+      class="title text-4xl font-bold tracking-wide bg-gradient-to-r  from-(--gradient-start-color) to-(--gradient-end-color) bg-clip-text text-transparent">
       欢迎使用lite-notion
     </div>
 
@@ -13,31 +12,31 @@
       <el-form class="w-full" ref="ruleFormRef" :model="ruleForm" status-icon :rules="rules">
         <el-form-item class="h-12 w-full" prop="email">
           <el-input placeholder="请输入您的邮箱"
-            class="h-12! w-full! rounded-lg! border-gray-200! hover:border-blue-400! transition-all" type="email"
+            class="h-12! w-full! rounded-lg!  transition-all" type="email"
             v-model="ruleForm.email" />
         </el-form-item>
 
         <el-form-item class="h-12 w-full" v-show="showKeyinput" prop="pass">
           <el-input placeholder="请输入密码"
-            class="h-12! w-full! rounded-lg! border-gray-200! hover:border-blue-400! transition-all" type="password"
+            class="h-12! w-full! rounded-lg!  transition-all" type="password"
             v-model="ruleForm.pass" autocomplete="off" />
         </el-form-item>
         <el-form-item class="h-12 w-full" v-show="showCaptcha">
           <div class="captcha flex justify-between w-full">
             <el-input placeholder="请输入验证码" v-model="ruleForm.checkcode"
-              class="h-12! w-56! rounded-lg! border-gray-200! hover:border-blue-400! transition-all" show-password />
+              class="h-12! w-56! rounded-lg!  transition-all" show-password />
             <el-button class="w-20 h-12!">获取验证码</el-button>
           </div>
         </el-form-item>
       </el-form>
       <el-button @click="submit"
-        class="h-12! w-full rounded-lg text-lg font-medium bg-gradient-to-r from-blue-500 to-purple-500 border-none text-white!">
+        class="h-12! w-full rounded-lg text-lg font-medium bg-gradient-to-r  from-(--gradient-start-color) to-(--gradient-end-color) border-none text-white!">
         {{ isRegister ? "注册" : "登录" }}
       </el-button>
-      <div class="tip">
+      <div class="tip text-(--color-text-secondary)">
         <span>{{ isRegister ? "已有帐号？" : "还没有账号？" }}</span>
         <button
-          class="border-none bg-transparent text-blue-500 hover:text-blue-600 transition-colors hover:underline hover:cursor-pointer  "
+          class="border-none bg-transparent text-(--color-primary) transition-colors hover:underline hover:cursor-pointer"
           @click="useLoginStore.switchState">点我{{ isRegister ? "登录" : "创建" }}</button>
       </div>
 
@@ -45,7 +44,7 @@
 
     <!-- 其他登录方式 -->
     <div class="floor w-80! gap-4 flex flex-col ">
-      <div class="split flex items-center justify-center gap-3 text-gray-400">
+      <div class="split flex items-center justify-center gap-3 text-(--color-text-default)">
         <span class="split-line w-25 h-px split-line-left inline-block"></span>
         <span class="text-xs">其他登录方式</span>
         <span class="split-line w-25 h-px split-line-right inline-block"></span>

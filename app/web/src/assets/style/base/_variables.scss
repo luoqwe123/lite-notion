@@ -1,19 +1,31 @@
 // app/web/src/assets/style/base/_variables.scss
 
 :root {
-  // Light Theme Variables
+  // Light Theme Variables - 现代柔和白色主题
   --color-primary: #42b883;
-  --color-text-default: #333;
-  --color-background-default: #ffffff;
+  --color-text-default: #1f2937;          // 深灰色文字，比纯黑更柔和
+  --color-text-secondary: #4b5563;        // 次要文字颜色
+  --color-background-default: #f8fafc;    // 柔和的灰白色背景
+  --color-background-card: #ffffff;       // 卡片背景 - 纯白
   --color-border-default: #e2e8f0;
-  // Add more light theme variables as needed
+  --gradient-start-color: #3b82f6;        // blue-500
+  --gradient-end-color: #a855f7;          // purple-500
+  --shadow-color: rgba(0, 0, 0, .13);     // Light mode shadow color
+  --shadow-color-medium: rgba(0, 0, 0, .08);
+  --shadow-color-strong: rgba(0, 0, 0, .04);
 }
 
 .dark {
-  // Dark Theme Variables
+  // Dark Theme Variables - 深色护眼主题
   --color-primary: #66cc99;
-  --color-text-default: #e2e8f0;
-  --color-background-default: #1a202c;
-  --color-border-default: #4a5568;
-  // Add more dark theme variables as needed
+  --color-text-default: #f3f4f6;          // 柔和的白色文字
+  --color-text-secondary: #9ca3af;        // 次要文字颜色
+  --color-background-default: #0f172a;    // 深蓝黑色背景
+  --color-background-card: #1e293b;       // 卡片背景 - 稍亮的深蓝灰
+  --color-border-default: #334155;
+  --gradient-start-color: #60a5fa;        // blue-400 (lighter for dark mode)
+  --gradient-end-color: #c084fc;          // purple-400 (lighter for dark mode)
+  --shadow-color: rgba(0, 0, 0, .3);      // Dark mode shadow color
+  --shadow-color-medium: rgba(0, 0, 0, .2);
+  --shadow-color-strong: rgba(0, 0, 0, .1);
 }

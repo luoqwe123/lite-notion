@@ -1,6 +1,6 @@
 // app/web/src/assets/style/utilities/_custom-shadows.scss
 @layer utilities {
     .shadow-login {
-        box-shadow: 0 4px 8px -4px rgba(0, 0, 0, .13), 0 6px 16px rgba(0, 0, 0, .08), 0 12px 24px 16px rgba(0, 0, 0, .04);
+        box-shadow: 0 4px 8px -4px var(--shadow-color), 0 6px 16px var(--shadow-color-medium), 0 12px 24px 16px var(--shadow-color-strong);
     }
 }

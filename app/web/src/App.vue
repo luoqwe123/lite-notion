@@ -1,16 +1,14 @@
 <template>
-    <div class="App-container">
+    <div class="app-container min-h-screen transition-colors duration-300 bg-(--color-background-default) text-(--color-text-default)">
        <router-view></router-view>
     </div>
 </template>
 
 <script setup lang='ts'>
-
-
-
 </script>
 
 <style scoped>
-
-
-</style >
+.app-container {
+  min-height: 100vh;
+}
+</style>
