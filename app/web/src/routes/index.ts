@@ -12,6 +12,10 @@ export const routes = createRouter({
         {
             path:"/login",
             component:()=>import("~/views/Login.vue")
+        },
+        {
+            path:"/document",
+            component:()=>import("~/views/Document.vue")
         }
     ]
 })

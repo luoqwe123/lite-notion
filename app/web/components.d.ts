@@ -23,5 +23,6 @@ declare module 'vue' {
     ShowIcon: typeof import('./src/components/showIcon.vue')['default']
     Test: typeof import('./src/components/LoginFrom/test.vue')['default']
     ThemeToggle: typeof import('./src/components/ThemeToggle.vue')['default']
+    Tiptap: typeof import('./src/components/Tiptap.vue')['default']
   }
 }
