@@ -14,22 +14,32 @@
       <button @click="editor?.chain().focus().toggleCode().run()" :class="{ active: editor?.isActive('code') }">
         行内代码
       </button>
-      <button @click="editor?.chain().focus().toggleHeading({ level: 1 }).run()" :class="{ active: editor?.isActive('heading', { level: 1 }) }">
+      <button @click="editor?.chain().focus().toggleHeading({ level: 1 }).run()"
+        :class="{ active: editor?.isActive('heading', { level: 1 }) }">
         H1
       </button>
-      <button @click="editor?.chain().focus().toggleHeading({ level: 2 }).run()" :class="{ active: editor?.isActive('heading', { level: 2 }) }">
+      <button @click="editor?.chain().focus().toggleHeading({ level: 2 }).run()"
+        :class="{ active: editor?.isActive('heading', { level: 2 }) }">
         H2
       </button>
-      <button @click="editor?.chain().focus().toggleBulletList().run()" :class="{ active: editor?.isActive('bulletList') }">
+      <button @click="editor?.chain().focus().toggleHeading({ level: 3 }).run()"
+        :class="{ active: editor?.isActive('heading', { level: 3 }) }">
+        H3
+      </button>
+      <button @click="editor?.chain().focus().toggleBulletList().run()"
+        :class="{ active: editor?.isActive('bulletList') }">
         无序列表
       </button>
-      <button @click="editor?.chain().focus().toggleOrderedList().run()" :class="{ active: editor?.isActive('orderedList') }">
+      <button @click="editor?.chain().focus().toggleOrderedList().run()"
+        :class="{ active: editor?.isActive('orderedList') }">
         有序列表
       </button>
-      <button @click="editor?.chain().focus().toggleCodeBlock().run()" :class="{ active: editor?.isActive('codeBlock') }">
+      <button @click="editor?.chain().focus().toggleCodeBlock().run()"
+        :class="{ active: editor?.isActive('codeBlock') }">
         代码块
       </button>
-      <button @click="editor?.chain().focus().toggleBlockquote().run()" :class="{ active: editor?.isActive('blockquote') }">
+      <button @click="editor?.chain().focus().toggleBlockquote().run()"
+        :class="{ active: editor?.isActive('blockquote') }">
         引用
       </button>
       <button @click="handleImage">图片上传</button>
@@ -46,6 +56,8 @@
 import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
 import { useEditor, EditorContent } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
+import { Extension } from '@tiptap/core'
+
 import Image from '@tiptap/extension-image'
 
 // 支持 v-model
@@ -56,6 +68,31 @@ const emit = defineEmits<{
   'update:modelValue': [value: string]
 }>()
 
+
+// 自定义 Tab 缩进扩展（标准官方写法，无任何类型错误）
+const ListTabHandler = Extension.create({
+  name: 'listTabHandler',
+
+  addKeyboardShortcuts() {
+    return {
+      // Tab = 缩进（进入下一级列表）
+      Tab: () => {
+        if (this.editor.isActive('listItem')) {
+          return this.editor.chain().focus().sinkListItem('listItem').run()
+        }
+        return false
+      },
+
+      // Shift + Tab = 取消缩进（返回上一级）
+      'Shift-Tab': () => {
+        if (this.editor.isActive('listItem')) {
+          return this.editor.chain().focus().liftListItem('listItem').run()
+        }
+        return false
+      },
+    }
+  },
+})
 // 初始化编辑器
 const editor = useEditor({
   extensions: [
@@ -63,6 +100,9 @@ const editor = useEditor({
       heading: {
         levels: [1, 2, 3],
       },
+      listItem: {},
+      bulletList: {},
+      orderedList: {},
     }),
     Image.configure({
       allowBase64: false,
@@ -70,8 +110,17 @@ const editor = useEditor({
         class: 'tiptap-img',
       },
     }),
+    // 👇 关键：添加 Tab 缩进逻辑
+    ListTabHandler
+
   ],
   content: props.modelValue || '<p></p>',
+  // 初始化后将光标放入编辑器
+  autofocus: true,
+  // 使文本可编辑（默认是 true）
+  editable: true,
+  // 防止加载默认的 CSS（反正也不多）
+  injectCSS: false,
   onUpdate: ({ editor }) => {
     const html = editor.getHTML()
     emit('update:modelValue', html)
@@ -179,6 +228,67 @@ onBeforeUnmount(() => {
       padding: 12px;
       border-radius: 4px;
       overflow-x: auto;
+    }
+  }
+
+  :deep(.ProseMirror) {
+    ol {
+      list-style-type: decimal !important;
+    }
+
+    ol ol {
+      list-style-type: lower-alpha !important;
+    }
+
+    ol ol ol {
+      list-style-type: lower-roman !important;
+    }
+
+    ol ol ol ol {
+      list-style-type: decimal !important;
+    }
+
+    ol ol ol ol ol {
+      list-style-type: lower-alpha !important;
+    }
+
+    ol ol ol ol ol ol {
+      list-style-type: lower-roman !important;
+    }
+
+    ul {
+      list-style-type: disc !important;
+    }
+
+    ul ul {
+      list-style-type: circle !important;
+    }
+
+    ul ul ul {
+      list-style-type: square !important;
+    }
+
+    ul ul ul ul {
+      list-style-type: "- " !important;
+    }
+
+    ul ul ul ul ul {
+      list-style-type: disc !important;
+    }
+
+    ul ul ul ul ul ul {
+      list-style-type: circle !important;
+    }
+
+    /* 基础缩进 */
+    li {
+      margin: 0.2em 0;
+    }
+
+    ul,
+    ol {
+      padding-left: 1.2em;
+      margin: 0.3em 0;
     }
   }
 }

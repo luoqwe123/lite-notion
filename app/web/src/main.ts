@@ -19,7 +19,6 @@ const app = createApp(App);
 app.use(createApp);
 const pinia = createPinia(); // Create pinia instance
 app.use(pinia); // Use the created pinia instance
-
 // Initialize theme
 const themeStore = useThemeStore();
 themeStore.initializeTheme();

@@ -113,4 +113,4 @@ class Ofetch {
   }
 }
 
-export const  request = new Ofetch(import.meta.env.BASE_URL);
+export const  request = new Ofetch(import.meta.env.VITE_BASEURL);
