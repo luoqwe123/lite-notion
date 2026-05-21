@@ -38,11 +38,30 @@
         :class="{ active: editor?.isActive('codeBlock') }">
         代码块
       </button>
+
       <button @click="editor?.chain().focus().toggleBlockquote().run()"
         :class="{ active: editor?.isActive('blockquote') }">
         引用
       </button>
+      <button @click="editor?.chain().focus().toggleTaskList().run()" :class="{ active: editor?.isActive('taskList') }">
+        任务列表
+      </button>
       <button @click="handleImage">图片上传</button>
+
+      <!-- 代码块语言下拉（选中代码块才显示） -->
+      <select v-if="isCodeBlockActive" class="lang-select" :value="currentLang"
+        @change="handleLanguageChange($event)">
+        <option v-for="item in languageOptions" :key="item.value" :value="item.value">
+          {{ item.label }}
+        </option>
+      </select>
+
+      <!-- 复制按钮（选中代码块才显示） -->
+      <button v-if="isCodeBlockActive" class="copy-btn" @click="handleCopyCode">
+        复制代码
+      </button>
+
+
     </div>
 
     <!-- 编辑器内容区域 -->
@@ -53,12 +72,28 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
+import { ref, watch, onMounted, onBeforeUnmount, useTemplateRef, computed } from 'vue'
 import { useEditor, EditorContent } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
 import { Extension } from '@tiptap/core'
-
+import TaskList from '@tiptap/extension-task-list'
+import TaskItem from '@tiptap/extension-task-item'
 import Image from '@tiptap/extension-image'
+// 🔥 代码高亮核心
+import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
+import { createLowlight } from 'lowlight'
+// 导入需要高亮的语言
+import javascript from 'highlight.js/lib/languages/javascript'
+import typescript from 'highlight.js/lib/languages/typescript'
+import css from 'highlight.js/lib/languages/css'
+import xml from 'highlight.js/lib/languages/xml'
+import json from 'highlight.js/lib/languages/json'
+
+
+// 1. 创建 lowlight 实例并注册语言
+const lowlight = createLowlight()
+lowlight.register({ javascript, typescript, css, xml, json })
+
 
 // 支持 v-model
 const props = defineProps<{
@@ -99,7 +134,9 @@ const editor = useEditor({
     StarterKit.configure({
       heading: {
         levels: [1, 2, 3],
+
       },
+      codeBlock: false, // 必须关闭自带，否则冲突
       listItem: {},
       bulletList: {},
       orderedList: {},
@@ -111,7 +148,19 @@ const editor = useEditor({
       },
     }),
     // 👇 关键：添加 Tab 缩进逻辑
-    ListTabHandler
+    ListTabHandler,
+    TaskList,
+    TaskItem.configure({
+      nested: true, // 支持嵌套任务
+    }),
+    // 🔥 代码高亮扩展（支持多语言）
+    CodeBlockLowlight.configure({
+      lowlight,
+      defaultLanguage: 'javascript',
+      languageClassPrefix: 'language-',
+      // 官方支持语言切换
+
+    }),
 
   ],
   content: props.modelValue || '<p></p>',
@@ -125,7 +174,50 @@ const editor = useEditor({
     const html = editor.getHTML()
     emit('update:modelValue', html)
   },
+
 });
+
+
+// 语言切换
+// 语言选项列表
+const languageOptions = [
+  { label: 'JavaScript', value: 'javascript' },
+  { label: 'TypeScript', value: 'typescript' },
+  { label: 'HTML', value: 'html' },
+  { label: 'CSS', value: 'css' },
+  { label: 'JSON', value: 'json' },
+
+]
+const isCodeBlockActive = computed(() => {
+  return editor.value?.isActive('codeBlock') || false
+})
+
+const currentLang = computed(() => {
+  return editor.value?.getAttributes('codeBlock').language || 'javascript'
+})
+
+const handleCodeBlock = () => {
+  if (!editor.value) return
+  editor.value.chain().focus().toggleCodeBlock().run()
+}
+
+const handleLanguageChange = (e:Event) => {
+  let lang = (e.target as HTMLSelectElement).value
+  if (!editor.value) return
+  editor.value
+    .chain()
+    .focus()
+    .updateAttributes('codeBlock', { language: lang })
+    .run()
+}
+
+const handleCopyCode = async () => {
+  if (!editor.value) return
+  const code = editor.value.getAttributes('codeBlock').textContent || ''
+  await navigator.clipboard.writeText(code)
+  alert('复制成功！')
+}
+
 
 // 监听外部 v-model 变化
 watch(
@@ -291,5 +383,144 @@ onBeforeUnmount(() => {
       margin: 0.3em 0;
     }
   }
+
+  :deep(.ProseMirror) {
+
+    // ✅ 任务列表样式（语雀风格）
+    ul[data-type="taskList"] {
+      list-style: none;
+      padding-left: 0;
+
+      li {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        margin: 4px 0;
+
+        label {
+          margin-top: 3px;
+        }
+
+        input[type="checkbox"] {
+          width: 16px;
+          height: 16px;
+          cursor: pointer;
+          accent-color: #00b42a; // 绿色勾选框，和你截图一样
+        }
+
+        &[data-checked="true"] {
+          p {
+            text-decoration: line-through;
+            color: #999;
+          }
+        }
+      }
+    }
+  }
+
+  :deep(.ProseMirror) {
+
+    /* 🔥 代码块高亮样式（语雀风格深色主题） */
+    pre {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      border-radius: 6px;
+      padding: 16px;
+      overflow-x: auto;
+      margin: 12px 0;
+      position: relative;
+
+      /* 右上角工具栏 */
+      .code-block-toolbar {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        display: flex;
+        gap: 8px;
+        align-items: center;
+
+        select {
+          background: #2d2d2d;
+          color: #d4d4d4;
+          border: 1px solid #3c3c3c;
+          border-radius: 4px;
+          padding: 2px 4px;
+          font-size: 12px;
+          cursor: pointer;
+        }
+
+        button {
+          background: #2d2d2d;
+          color: #d4d4d4;
+          border: 1px solid #3c3c3c;
+          border-radius: 4px;
+          padding: 2px 8px;
+          font-size: 12px;
+          cursor: pointer;
+          transition: background 0.2s;
+
+          &:hover {
+            background: #3c3c3c;
+          }
+        }
+      }
+
+      /* 语言选择器样式 */
+      &::before {
+        content: attr(data-language);
+        position: absolute;
+        top: 8px;
+        right: 12px;
+        font-size: 12px;
+        color: #858585;
+        text-transform: uppercase;
+      }
+
+      code {
+        display: block;
+        color: inherit;
+        padding: 0;
+        background: transparent;
+        font-size: 14px;
+        line-height: 1.5;
+        font-family: Consolas, 'Monaco', monospace;
+      }
+    }
+
+    /* 不同语言的高亮颜色 */
+    .hljs-keyword {
+      color: #569cd6;
+    }
+
+    .hljs-string {
+      color: #ce9178;
+    }
+
+    .hljs-number {
+      color: #b5cea8;
+    }
+
+    .hljs-function {
+      color: #dcdcaa;
+    }
+
+    .hljs-comment {
+      color: #6a9955;
+    }
+
+    .hljs-variable {
+      color: #9cdcfe;
+    }
+
+    /* 行内代码 */
+    :not(pre)>code {
+      background: #f5f5f5;
+      color: #e53935;
+      padding: 2px 4px;
+      border-radius: 3px;
+      font-size: 14px;
+    }
+  }
+
 }
 </style>
