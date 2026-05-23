@@ -2,7 +2,7 @@
   <div class="tiptap-editor-wrapper ">
     <!-- 工具栏 -->
     <div class="toolbar w-full">
-      <Toolbal :editor="editor!"  />
+      <Toolbal :editor="editor!" @image-upload="uploadImage" />
 
     </div>
 
@@ -19,18 +19,19 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, useTemplateRef, watch, } from 'vue'
+import { onBeforeUnmount, onMounted, useTemplateRef, watch, } from 'vue'
 import { EditorContent, } from '@tiptap/vue-3'
 import Toolbal from "./Toolbar/index.vue"
-
+import browserImageCompression from 'browser-image-compression'
 import { useTiptapEditor } from './composables/useTiptapEditor'
 import { useEditorStore } from '~/stores/modules/editor'
+import { ElMessage } from 'element-plus'
 
 let editorStore = useEditorStore();
 
 
 let title = defineModel<string>("title");
-const editorContentRef = useTemplateRef("editorContentRef");
+const editorContentRef = useTemplateRef<InstanceType<typeof EditorContent>>("editorContentRef");
 
 // 支持 v-model
 const props = defineProps<{
@@ -41,41 +42,47 @@ const emit = defineEmits<{
   'update:modelValue': [value: string]
 }>()
 
-const IMG_SETTING = {
+// WebP 比 JPG/PNG 体积小 30%~70%
+// 画质几乎不变
+// 现代浏览器 100% 支持
+
+const IMG_CONFIG = {
   maxSizeMB: 10,
   allowTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
   compress: {
-    maxSizeMB: 2,
-    maxWidthOrHeight: 1600,
-    useWebp: true,
-    webpQuality: 0.8,
+    maxSizeMB: 2,   // 如果图片超过 2MB，库会自动压缩到 2MB 以内
+    maxWidthOrHeight: 1600, // 图片宽度 > 1600px → 缩到 1600px  图片高度 > 1600px → 缩到 1600px    等比例缩放，不会变形
+    useWebp: true,  // 把图片统一转成 WebP 格式
+    webpQuality: 0.8,  // WebP 图片质量（0 ~ 1）  肉眼看不出区别，但体积小非常多。
   },
 }
 
 // 上传逻辑：本地预览 → 上传 → 替换URL
-// const uploadImage = async (file: File) => {
-//   try {
-//     if (!IMG_CONFIG.allowTypes.includes(file.type)) return alert('仅支持 jpg/png/gif/webp')
-//     if (file.size / 1024 / 1024 > IMG_CONFIG.maxSizeMB) return alert(`最大 ${IMG_CONFIG.maxSizeMB}MB`)
+const uploadImage = async (file: File) => {
+  try {
+    if (!IMG_CONFIG.allowTypes.includes(file.type)) return alert('仅支持 jpg/png/gif/webp')
+    if (file.size / 1024 / 1024 > IMG_CONFIG.maxSizeMB) return alert(`最大 ${IMG_CONFIG.maxSizeMB}MB`)
 
-//     const compressed = await browserImageCompression(file, IMG_CONFIG.compress)
-//     const tempUrl = URL.createObjectURL(compressed)
+    const compressed = await browserImageCompression(file, IMG_CONFIG.compress)
+    const tempUrl = URL.createObjectURL(compressed)
+    console.log(tempUrl)
 
-//     // 插入本地预览
-//     editor.value?.chain().focus().setImage({ src: tempUrl }).run()
+    // 插入本地预览
+    editor.value?.chain().focus().setImage({ src: tempUrl,width:800  }).run()
 
-//     // 模拟上传（替换成你的接口）
-//     const realUrl = await new Promise<string>(resolve => {
-//       setTimeout(() => resolve(tempUrl), 800)
-//     })
+    // 模拟上传（替换成你的接口）
+    // const realUrl = await new Promise<string>(resolve => {
+    //   setTimeout(() => resolve(tempUrl), 800)
+    // })
 
-//     // 替换真实地址
-//     editor.value?.chain().focus().updateAttributes('image', { src: realUrl }).run()
-//     URL.revokeObjectURL(tempUrl)
-//   } catch (err) {
-//     alert('上传失败')
-//   }
-// }
+    // // 替换真实地址
+    // editor.value?.chain().focus().updateAttributes('image', { src: realUrl }).run()
+    // URL.revokeObjectURL(tempUrl)
+  } catch (err) {
+    ElMessage.error("上传失败")
+    
+  }
+}
 
 const { editor, setContent } = useTiptapEditor({
   initialContent: props.modelValue,
@@ -102,40 +109,39 @@ const autoResizeTextarea = (e: Event) => {
 
 
 
-// ------------------------------
 // 5. 监听粘贴（截图/图片）
-// ------------------------------
-// const handlePaste = async (e: ClipboardEvent) => {
-//   const items = e.clipboardData?.items
-//   if (!items) return
 
-//   for (const item of items) {
-//     if (item.kind === 'file' && item.type.startsWith('image/')) {
-//       const file = item.getAsFile()
-//       if (file) {
-//         e.preventDefault()
-//         await processImage(file)
-//         break
-//       }
-//     }
-//   }
-// }
+const handlePaste = async (e: ClipboardEvent) => {
+  const items = e.clipboardData?.items
+  if (!items) return
 
-// ------------------------------
+  for (const item of items) {
+    if (item.kind === 'file' && item.type.startsWith('image/')) {
+      const file = item.getAsFile()
+      if (file) {
+        e.preventDefault()
+        await uploadImage(file)
+        break
+      }
+    }
+  }
+}
+
+
 // 6. 监听拖拽上传
-// ------------------------------
-// const handleDrop = async (e: DragEvent) => {
-//   e.preventDefault()
-//   const files = e.dataTransfer?.files
-//   if (!files) return
 
-//   for (let i = 0; i < files.length; i++) {
-//     const file = files[i]
-//     if (file.type.startsWith('image/')) {
-//       await processImage(file)
-//     }
-//   }
-// }
+const handleDrop = async (e: DragEvent) => {
+  e.preventDefault()
+  const files = e.dataTransfer?.files
+  if (!files) return
+
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i]
+    if (file.type.startsWith('image/')) {
+      await uploadImage(file)
+    }
+  }
+}
 
 const handleDragOver = (e: DragEvent) => {
   e.preventDefault()
@@ -149,12 +155,20 @@ onMounted(() => {
     textarea.style.height = '0'
     textarea.style.height = textarea.scrollHeight + 'px'
   }
-  const el = editorContentRef.value?.rootEl
+  const el = editorContentRef.value?.rootEl as HTMLElement;
   if (!el) return
 
-  // el.addEventListener('paste', handlePaste)
-  // el.addEventListener('drop', handleDrop)
-  // el.addEventListener('dragover', handleDragOver)
+  el.addEventListener('paste', handlePaste)
+  el.addEventListener('drop', handleDrop)
+  el.addEventListener('dragover', handleDragOver)
+})
+onBeforeUnmount(() => {
+  const el = editorContentRef.value?.rootEl as HTMLElement | null
+  if (!el) return
+
+  el.removeEventListener('paste', handlePaste)
+  el.removeEventListener('drop', handleDrop)
+  el.removeEventListener('dragover', handleDragOver)
 })
 
 </script>

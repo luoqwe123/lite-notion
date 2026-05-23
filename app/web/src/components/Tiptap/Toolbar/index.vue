@@ -85,24 +85,19 @@ interface Props {
 
 const props = defineProps<Props>()
 
-// const emit = defineEmits<{
-//   imageUpload: []
-// }>()
+const emit = defineEmits<{
+  imageUpload: [File:File]
+}>()
 
 const fileInputRef = useTemplateRef("fileInputRef");
 const handleUpdateFile = ()=>{
     fileInputRef.value?.click()
 }
-const handleFileSelect = async (e:Event)=>{
-  console.log(e)
-   const file = (e.target as HTMLInputElement)?.files?.[0];
-    if (!file) return
 
-    // 这里可以上传到后端拿到 url
-    const url = URL.createObjectURL(file)
-
-    // 插入图片
-    props.editor?.chain().focus().setImage({ src: url }).run()
+const handleFileSelect = async (e: Event) => {
+  const file = (e.target as HTMLInputElement).files?.[0]
+  if (!file) return
+  emit("imageUpload",file)
 }
 const toolbarItems = [
   { name: 'bold', label: '粗体', action: () => props.editor?.chain().focus().toggleBold().run() },

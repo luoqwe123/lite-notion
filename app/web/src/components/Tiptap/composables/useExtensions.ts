@@ -6,6 +6,7 @@ import ImageResize from 'tiptap-extension-resize-image'
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
 import { VueNodeViewRenderer } from '@tiptap/vue-3'
 import { createLowlight } from 'lowlight'
+import Image from '@tiptap/extension-image'
 
 // 导入语言
 import javascript from 'highlight.js/lib/languages/javascript'
@@ -49,6 +50,36 @@ export const CustomCodeBlock = CodeBlockLowlight.extend({
     return VueNodeViewRenderer(CodeBlockNodeView)
   },
 })
+const CustomImageResize = ImageResize.extend({
+  addAttributes() {
+    return {
+      ...this.parent?.(),
+      class: {
+        default: 'tiptap-img',
+      },
+      width: {
+        default: 800, // 👈 你要的默认宽度
+        parseHTML: el => el.getAttribute('width') || 800,
+        renderHTML: attrs => ({ width: attrs.width }),
+      },
+    }
+  },
+  parseHTML() {
+    return [
+      {
+        tag: 'img[src]',
+        getAttrs: (dom) => {
+          // 允许 base64
+          const src = dom.getAttribute('src')
+          if (src?.startsWith('data:image/')) {
+            return { src, class: 'tiptap-img' }
+          }
+          return { src, class: 'tiptap-img' }
+        },
+      },
+    ]
+  },
+})
 
 // 所有扩展配置
 export const getExtensions = () => [
@@ -60,11 +91,12 @@ export const getExtensions = () => [
     orderedList: {},
   }),
   // 只使用 ImageResize，不要同时配置 Image 扩展
-  ImageResize.configure({
+
+  CustomImageResize.configure({
     minWidth: 100,
     maxWidth: 1600,
-    allowBase64: true,
-    HTMLAttributes: { class: 'tiptap-img' },
+
+
   }),
   ListTabHandler,
   TaskList,
