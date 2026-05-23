@@ -2,7 +2,7 @@
   <div class="tiptap-editor-wrapper ">
     <!-- 工具栏 -->
     <div class="toolbar w-full">
-      <Toolbal :editor="editor!" @image-upload="handleImage" />
+      <Toolbal :editor="editor!"  />
 
     </div>
 
@@ -13,13 +13,13 @@
       <textarea v-model="title" placeholder="请输入标题" class="title-textarea" name="title" 
       :disabled="!editorStore.editor"  
       @input="autoResizeTextarea"></textarea>
-      <editor-content :editor="editor" />
+      <editor-content :editor="editor"   ref="editorContentRef" draggable="true" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, watch, } from 'vue'
+import { onMounted, useTemplateRef, watch, } from 'vue'
 import { EditorContent, } from '@tiptap/vue-3'
 import Toolbal from "./Toolbar/index.vue"
 
@@ -27,9 +27,10 @@ import { useTiptapEditor } from './composables/useTiptapEditor'
 import { useEditorStore } from '~/stores/modules/editor'
 
 let editorStore = useEditorStore();
-console.log( editorStore)
 
-let title = defineModel<string>("title")
+
+let title = defineModel<string>("title");
+const editorContentRef = useTemplateRef("editorContentRef");
 
 // 支持 v-model
 const props = defineProps<{
@@ -40,7 +41,41 @@ const emit = defineEmits<{
   'update:modelValue': [value: string]
 }>()
 
+const IMG_SETTING = {
+  maxSizeMB: 10,
+  allowTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
+  compress: {
+    maxSizeMB: 2,
+    maxWidthOrHeight: 1600,
+    useWebp: true,
+    webpQuality: 0.8,
+  },
+}
 
+// 上传逻辑：本地预览 → 上传 → 替换URL
+// const uploadImage = async (file: File) => {
+//   try {
+//     if (!IMG_CONFIG.allowTypes.includes(file.type)) return alert('仅支持 jpg/png/gif/webp')
+//     if (file.size / 1024 / 1024 > IMG_CONFIG.maxSizeMB) return alert(`最大 ${IMG_CONFIG.maxSizeMB}MB`)
+
+//     const compressed = await browserImageCompression(file, IMG_CONFIG.compress)
+//     const tempUrl = URL.createObjectURL(compressed)
+
+//     // 插入本地预览
+//     editor.value?.chain().focus().setImage({ src: tempUrl }).run()
+
+//     // 模拟上传（替换成你的接口）
+//     const realUrl = await new Promise<string>(resolve => {
+//       setTimeout(() => resolve(tempUrl), 800)
+//     })
+
+//     // 替换真实地址
+//     editor.value?.chain().focus().updateAttributes('image', { src: realUrl }).run()
+//     URL.revokeObjectURL(tempUrl)
+//   } catch (err) {
+//     alert('上传失败')
+//   }
+// }
 
 const { editor, setContent } = useTiptapEditor({
   initialContent: props.modelValue,
@@ -59,28 +94,53 @@ watch(
   }
 )
 
-// 图片上传（模拟，可对接后端）
-const handleImage = () => {
-  const input = document.createElement('input')
-  input.type = 'file'
-  input.accept = 'image/*'
-  input.onchange = async (e: any) => {
-    const file = e.target.files[0]
-    if (!file) return
-
-    // 这里可以上传到后端拿到 url
-    const url = URL.createObjectURL(file)
-
-    // 插入图片
-    editor.value?.chain().focus().setImage({ src: url }).run()
-  }
-  input.click()
-}
 const autoResizeTextarea = (e: Event) => {
   const textarea = e.target as HTMLTextAreaElement
   textarea.style.height = '0'
   textarea.style.height = textarea.scrollHeight + 'px'
 }
+
+
+
+// ------------------------------
+// 5. 监听粘贴（截图/图片）
+// ------------------------------
+// const handlePaste = async (e: ClipboardEvent) => {
+//   const items = e.clipboardData?.items
+//   if (!items) return
+
+//   for (const item of items) {
+//     if (item.kind === 'file' && item.type.startsWith('image/')) {
+//       const file = item.getAsFile()
+//       if (file) {
+//         e.preventDefault()
+//         await processImage(file)
+//         break
+//       }
+//     }
+//   }
+// }
+
+// ------------------------------
+// 6. 监听拖拽上传
+// ------------------------------
+// const handleDrop = async (e: DragEvent) => {
+//   e.preventDefault()
+//   const files = e.dataTransfer?.files
+//   if (!files) return
+
+//   for (let i = 0; i < files.length; i++) {
+//     const file = files[i]
+//     if (file.type.startsWith('image/')) {
+//       await processImage(file)
+//     }
+//   }
+// }
+
+const handleDragOver = (e: DragEvent) => {
+  e.preventDefault()
+}
+
 
 // 一进来就初始化高度
 onMounted(() => {
@@ -89,6 +149,12 @@ onMounted(() => {
     textarea.style.height = '0'
     textarea.style.height = textarea.scrollHeight + 'px'
   }
+  const el = editorContentRef.value?.rootEl
+  if (!el) return
+
+  // el.addEventListener('paste', handlePaste)
+  // el.addEventListener('drop', handleDrop)
+  // el.addEventListener('dragover', handleDragOver)
 })
 
 </script>
@@ -153,4 +219,6 @@ onMounted(() => {
 
 
 }
+
+
 </style>

@@ -18,6 +18,8 @@
     "typescript": "^6.0.3"
   },
   "dependencies": {
-    "@nestjs/cli": "^11.0.21"
+    "@nestjs/cli": "^11.0.21",
+    "browser-image-compression": "^2.0.2",
+    "tiptap-extension-resize-image": "^1.4.0"
   }
 }

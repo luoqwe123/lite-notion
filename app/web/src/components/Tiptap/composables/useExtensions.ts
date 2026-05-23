@@ -2,7 +2,7 @@ import StarterKit from '@tiptap/starter-kit'
 import { Extension } from '@tiptap/core'
 import TaskList from '@tiptap/extension-task-list'
 import TaskItem from '@tiptap/extension-task-item'
-import Image from '@tiptap/extension-image'
+import ImageResize from 'tiptap-extension-resize-image'
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
 import { VueNodeViewRenderer } from '@tiptap/vue-3'
 import { createLowlight } from 'lowlight'
@@ -59,8 +59,11 @@ export const getExtensions = () => [
     bulletList: {},
     orderedList: {},
   }),
-  Image.configure({
-    allowBase64: false,
+  // 只使用 ImageResize，不要同时配置 Image 扩展
+  ImageResize.configure({
+    minWidth: 100,
+    maxWidth: 1600,
+    allowBase64: true,
     HTMLAttributes: { class: 'tiptap-img' },
   }),
   ListTabHandler,

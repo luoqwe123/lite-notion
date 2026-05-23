@@ -7,6 +7,17 @@
       height: auto;
       margin: 8px 0;
       border-radius: 4px;
+      position: relative;
+    }
+
+    // 图片调整大小的样式
+    img.resize-cursor {
+      cursor: ew-resize;
+      cursor: col-resize;
+    }
+
+    img.ProseMirror-selectednode {
+      outline: 2px solid #409eff;
     }
 
     p {
