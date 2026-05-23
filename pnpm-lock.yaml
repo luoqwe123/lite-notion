@@ -14,9 +14,9 @@ importers:
       browser-image-compression:
         specifier: ^2.0.2
         version: 2.0.2
-      tiptap-extension-resize-image:
-        specifier: ^1.4.0
-        version: 1.4.0(@tiptap/core@3.23.5(@tiptap/pm@3.23.5))(@tiptap/extension-image@3.23.5(@tiptap/core@3.23.5(@tiptap/pm@3.23.5)))(@tiptap/pm@3.23.5)
+      tiptap-extension-resizable:
+        specifier: ^1.1.1
+        version: 1.1.1(@tiptap/pm@3.23.5)
     devDependencies:
       prisma-merge:
         specifier: ^0.2.0
@@ -1442,6 +1442,11 @@ packages:
     resolution: {integrity: sha512-pCvohwOCspk3ZFn6eJzrrX3g4n2JY73H6MmYC87XfGPyTty4YsCjYTMArRZm/zOI8dIt3+EcrLHAFPe5A4bgtw==}
     peerDependencies:
       vite: ^5.2.0 || ^6 || ^7 || ^8
+
+  '@tiptap/core@2.27.2':
+    resolution: {integrity: sha512-ABL1N6eoxzDzC1bYvkMbvyexHacszsKdVPYqhl5GwHLOvpZcv9VE9QaKwDILTyz5voCA0lGcAAXZp+qnXOk5lQ==}
+    peerDependencies:
+      '@tiptap/pm': ^2.7.0
 
   '@tiptap/core@3.23.5':
     resolution: {integrity: sha512-657Xqcgf1IYWLkAmRDJKNSGdoS1AHJEgK6zHWHFJERQGIqHnwC7Fz7nvWs/NQhQVBkclQd0ERRdTCZ3XwRc1+g==}
@@ -5218,12 +5223,8 @@ packages:
     resolution: {integrity: sha512-pn99VhoACYR8nFHhxqix+uvsbXineAasWm5ojXoN8xEwK5Kd3/TrhNn1wByuD52UxWRLy8pu+kRMniEi6Eq9Zg==}
     engines: {node: '>=12.0.0'}
 
-  tiptap-extension-resize-image@1.4.0:
-    resolution: {integrity: sha512-4CbzgJyY0xyRGGXUa1JmC9KQwdFN5OgFahbvnn+5IRpbLH1yfbDVEHZ6WSLA42qiwtxOoa6XUSqkTS/QMULQYQ==}
-    peerDependencies:
-      '@tiptap/core': ^2.0.0 || ^3.0.0
-      '@tiptap/extension-image': ^2.0.0 || ^3.0.0
-      '@tiptap/pm': ^2.0.0 || ^3.0.0
+  tiptap-extension-resizable@1.1.1:
+    resolution: {integrity: sha512-kArfuHstYziqGM6r8NR+qttRJHres562b+sMfQcUBnBdLgO2fmaOapChZeTKrRrZAhNJaXqY0c+erq74FOhQtg==}
 
   tmpl@1.0.5:
     resolution: {integrity: sha512-3f0uOEAQwIqGuWW2MVzYg8fV/QNnc/IpuJNG837rLuczAaLVHslWHZQj4IGiEl5Hs3kkbhwL9Ab7Hrsmuj+Smw==}
@@ -7219,6 +7220,10 @@ snapshots:
       '@tailwindcss/oxide': 4.2.4
       tailwindcss: 4.2.4
       vite: 8.0.10(@types/node@25.6.0)(jiti@2.6.1)(sass-embedded@1.99.0)(sass@1.99.0)(terser@5.46.2)(yaml@2.8.4)
+
+  '@tiptap/core@2.27.2(@tiptap/pm@3.23.5)':
+    dependencies:
+      '@tiptap/pm': 3.23.5
 
   '@tiptap/core@3.23.5(@tiptap/pm@3.23.5)':
     dependencies:
@@ -11450,11 +11455,12 @@ snapshots:
       fdir: 6.5.0(picomatch@4.0.4)
       picomatch: 4.0.4
 
-  tiptap-extension-resize-image@1.4.0(@tiptap/core@3.23.5(@tiptap/pm@3.23.5))(@tiptap/extension-image@3.23.5(@tiptap/core@3.23.5(@tiptap/pm@3.23.5)))(@tiptap/pm@3.23.5):
+  tiptap-extension-resizable@1.1.1(@tiptap/pm@3.23.5):
     dependencies:
-      '@tiptap/core': 3.23.5(@tiptap/pm@3.23.5)
-      '@tiptap/extension-image': 3.23.5(@tiptap/core@3.23.5(@tiptap/pm@3.23.5))
-      '@tiptap/pm': 3.23.5
+      '@tiptap/core': 2.27.2(@tiptap/pm@3.23.5)
+      lodash-es: 4.18.1
+    transitivePeerDependencies:
+      - '@tiptap/pm'
 
   tmpl@1.0.5: {}
 

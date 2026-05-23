@@ -28,3 +28,8 @@ declare module 'highlight.js/lib/languages/vue' {
   const lang: any
   export default lang
 }
+
+declare module "tiptap-extension-resizable"{
+  const Resizable:any
+  export default Resizable
+}

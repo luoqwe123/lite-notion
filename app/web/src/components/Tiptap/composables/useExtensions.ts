@@ -2,12 +2,11 @@ import StarterKit from '@tiptap/starter-kit'
 import { Extension } from '@tiptap/core'
 import TaskList from '@tiptap/extension-task-list'
 import TaskItem from '@tiptap/extension-task-item'
-import ImageResize from 'tiptap-extension-resize-image'
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
 import { VueNodeViewRenderer } from '@tiptap/vue-3'
 import { createLowlight } from 'lowlight'
 import Image from '@tiptap/extension-image'
-
+import Resizable from "tiptap-extension-resizable";
 // 导入语言
 import javascript from 'highlight.js/lib/languages/javascript'
 import typescript from 'highlight.js/lib/languages/typescript'
@@ -50,36 +49,7 @@ export const CustomCodeBlock = CodeBlockLowlight.extend({
     return VueNodeViewRenderer(CodeBlockNodeView)
   },
 })
-const CustomImageResize = ImageResize.extend({
-  addAttributes() {
-    return {
-      ...this.parent?.(),
-      class: {
-        default: 'tiptap-img',
-      },
-      width: {
-        default: 800, // 👈 你要的默认宽度
-        parseHTML: el => el.getAttribute('width') || 800,
-        renderHTML: attrs => ({ width: attrs.width }),
-      },
-    }
-  },
-  parseHTML() {
-    return [
-      {
-        tag: 'img[src]',
-        getAttrs: (dom) => {
-          // 允许 base64
-          const src = dom.getAttribute('src')
-          if (src?.startsWith('data:image/')) {
-            return { src, class: 'tiptap-img' }
-          }
-          return { src, class: 'tiptap-img' }
-        },
-      },
-    ]
-  },
-})
+
 
 // 所有扩展配置
 export const getExtensions = () => [
@@ -92,11 +62,24 @@ export const getExtensions = () => [
   }),
   // 只使用 ImageResize，不要同时配置 Image 扩展
 
-  CustomImageResize.configure({
-    minWidth: 100,
-    maxWidth: 1600,
-
-
+  // CustomImageResize.configure({
+  //   minWidth: 100,
+  //   maxWidth: 800
+  // }),
+   Image.configure({
+    allowBase64: false,
+    HTMLAttributes: { class: 'tiptap-img' },
+  }),
+  Resizable.configure({
+    types: ["image", "video"], // resizable type
+    handlerStyle: { // handler point style
+      width: "6px",
+      height: "6px",
+      background: "#07c160",
+    },
+    layerStyle: { // layer mask style
+      border: "1px solid #07c160",
+    },
   }),
   ListTabHandler,
   TaskList,

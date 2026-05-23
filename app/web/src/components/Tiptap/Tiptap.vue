@@ -76,9 +76,10 @@ const uploadImage = async (file: File) => {
     // })
 
     // // 替换真实地址
-    // editor.value?.chain().focus().updateAttributes('image', { src: realUrl }).run()
+    // editor.value?.chain().focus().updateAttributes('image', { withDefaults: 800 }).run()
     // URL.revokeObjectURL(tempUrl)
   } catch (err) {
+    console.log(err)
     ElMessage.error("上传失败")
     
   }
