@@ -10,8 +10,9 @@
 
     <!-- 编辑器内容区域 -->
     <div class="editor-content-box w-full">
-      <textarea v-model="title" placeholder="请输入标题" class="title-textarea" name="title"
-        @input="autoResizeTextarea"></textarea>
+      <textarea v-model="title" placeholder="请输入标题" class="title-textarea" name="title" 
+      :disabled="!editorStore.editor"  
+      @input="autoResizeTextarea"></textarea>
       <editor-content :editor="editor" />
     </div>
   </div>
@@ -23,9 +24,13 @@ import { EditorContent, } from '@tiptap/vue-3'
 import Toolbal from "./Toolbar/index.vue"
 
 import { useTiptapEditor } from './composables/useTiptapEditor'
+import { useEditorStore } from '~/stores/modules/editor'
+
+let editorStore = useEditorStore();
+console.log( editorStore)
 
 let title = defineModel<string>("title")
-console.log(title.value)
+
 // 支持 v-model
 const props = defineProps<{
   modelValue: string,

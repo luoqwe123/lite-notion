@@ -1,7 +1,9 @@
 import { ref, watch, onBeforeUnmount } from 'vue'
 import { useEditor } from '@tiptap/vue-3'
 import { getExtensions } from './useExtensions'
+import { useEditorStore } from '~/stores/modules/editor'
 
+let editorStore = useEditorStore();
 interface UseTiptapEditorOptions {
   initialContent?: string
   onUpdate?: (html: string) => void
@@ -14,7 +16,7 @@ export function useTiptapEditor(options: UseTiptapEditorOptions = {}) {
     extensions: getExtensions(),
     content: initialContent,
     autofocus: true,
-    editable: true,
+    editable: editorStore.editor,
     injectCSS: false,
     onUpdate: ({ editor }) => {
       const html = editor.getHTML()
