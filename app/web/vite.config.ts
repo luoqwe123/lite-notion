@@ -41,7 +41,8 @@ export default defineConfig({
     },
 
     // 2. 限制 Vite 的文件扫描范围（关键！）
-    server: {
+    server: { 
+       
         watch: {
             ignored: [
                 '**/node_modules/**',

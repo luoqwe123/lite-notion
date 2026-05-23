@@ -13,6 +13,49 @@
   --shadow-color: rgba(0, 0, 0, .13); // Light mode shadow color
   --shadow-color-medium: rgba(0, 0, 0, .08);
   --shadow-color-strong: rgba(0, 0, 0, .04);
+
+
+  /* 编辑器背景 */
+  --editor-bg: #ffffff;
+  --editor-color: #333333;
+  
+  /* 工具栏 */
+  --toolbar-bg: #fafafa;
+  --toolbar-border: #eeeeee;
+  --toolbar-divider: #dddddd;
+  
+  /* 按钮 */
+  --btn-bg: #ffffff;
+  --btn-color: #333333;
+  --btn-border: #dddddd;
+  --btn-hover-bg: #f0f0f0;
+  --btn-active-bg: #e8f3ff;
+  --btn-active-color: #1677ff;
+  --btn-active-border: #1677ff;
+  
+  /* 内容区域 */
+  --content-bg: #ffffff;
+  --content-color: #333333;
+  
+  /* 代码块 */
+  --code-bg: #f5f5f5;
+  --code-color: #333333;
+  --code-border: #e0e0e0;
+  --code-copy-color: #666666;
+  --code-copy-hover-color: #333333;
+  --code-lang-color: #999999;
+  --code-lang-hover-color: #666666;
+  
+  /* 引用块 */
+  --blockquote-border: #eeeeee;
+  --blockquote-color: #666666;
+  
+  /* 列表 */
+  --list-marker-color: #333333;
+  
+  /* 任务列表 */
+  --task-checkbox-color: #00b42a;
+  --task-checked-color: #999999;
 }
 
 .dark {
@@ -28,6 +71,50 @@
   --shadow-color: rgba(0, 0, 0, .3); // Dark mode shadow color
   --shadow-color-medium: rgba(0, 0, 0, .2);
   --shadow-color-strong: rgba(0, 0, 0, .1);
+
+
+
+  /* 编辑器背景 */
+  --editor-bg: #1e1e1e;
+  --editor-color: #d4d4d4;
+  
+  /* 工具栏 */
+  --toolbar-bg: #1e1e1e;
+  --toolbar-border: #333333;
+  --toolbar-divider: #444444;
+  
+  /* 按钮 */
+  --btn-bg: #2d2d2d;
+  --btn-color: #d4d4d4;
+  --btn-border: #3c3c3c;
+  --btn-hover-bg: #3c3c3c;
+  --btn-active-bg: #094771;
+  --btn-active-color: #ffffff;
+  --btn-active-border: #007acc;
+  
+  /* 内容区域 */
+  --content-bg: #1e1e1e;
+  --content-color: #d4d4d4;
+  
+  /* 代码块 */
+  --code-bg: #2d2d2d;
+  --code-color: #d4d4d4;
+  --code-border: #3c3c3c;
+  --code-copy-color: #858585;
+  --code-copy-hover-color: #d4d4d4;
+  --code-lang-color: #858585;
+  --code-lang-hover-color: #d4d4d4;
+  
+  /* 引用块 */
+  --blockquote-border: #444444;
+  --blockquote-color: #999999;
+  
+  /* 列表 */
+  --list-marker-color: #d4d4d4;
+  
+  /* 任务列表 */
+  --task-checkbox-color: #00b42a;
+  --task-checked-color: #666666;
 }
 
 ::view-transition-new(root),

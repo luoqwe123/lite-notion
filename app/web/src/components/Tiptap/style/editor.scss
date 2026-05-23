@@ -1,0 +1,125 @@
+  :deep(.ProseMirror) {
+    outline: none;
+    min-height: 260px;
+
+    img {
+      max-width: 100%;
+      height: auto;
+      margin: 8px 0;
+      border-radius: 4px;
+    }
+
+    p {
+      line-height: 1.6;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 12px 0 8px;
+      font-weight: 600;
+    }
+
+    blockquote {
+      border-left: 3px solid #eee;
+      padding-left: 12px;
+      color: #666;
+      margin: 12px 0;
+    }
+
+  }
+
+  :deep(.ProseMirror) {
+    ol {
+      list-style-type: decimal !important;
+    }
+
+    ol ol {
+      list-style-type: lower-alpha !important;
+    }
+
+    ol ol ol {
+      list-style-type: lower-roman !important;
+    }
+
+    ol ol ol ol {
+      list-style-type: decimal !important;
+    }
+
+    ol ol ol ol ol {
+      list-style-type: lower-alpha !important;
+    }
+
+    ol ol ol ol ol ol {
+      list-style-type: lower-roman !important;
+    }
+
+    ul {
+      list-style-type: disc !important;
+    }
+
+    ul ul {
+      list-style-type: circle !important;
+    }
+
+    ul ul ul {
+      list-style-type: square !important;
+    }
+
+    ul ul ul ul {
+      list-style-type: "- " !important;
+    }
+
+    ul ul ul ul ul {
+      list-style-type: disc !important;
+    }
+
+    ul ul ul ul ul ul {
+      list-style-type: circle !important;
+    }
+
+    /* 基础缩进 */
+    li {
+      margin: 0.2em 0;
+    }
+
+    ul,
+    ol {
+      padding-left: 1.2em;
+      margin: 0.3em 0;
+    }
+  }
+
+  :deep(.ProseMirror) {
+
+    // ✅ 任务列表样式（语雀风格）
+    ul[data-type="taskList"] {
+      list-style: none;
+      padding-left: 0;
+
+      li {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        margin: 4px 0;
+
+        label {
+          margin-top: 3px;
+        }
+
+        input[type="checkbox"] {
+          width: 16px;
+          height: 16px;
+          cursor: pointer;
+          accent-color: #00b42a; // 绿色勾选框，和你截图一样
+        }
+
+        &[data-checked="true"] {
+          p {
+            text-decoration: line-through;
+            color: #999;
+          }
+        }
+      }
+    }
+  }

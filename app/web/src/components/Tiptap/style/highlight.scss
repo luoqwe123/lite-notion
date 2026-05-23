@@ -1,0 +1,170 @@
+
+
+:deep(.hljs) {
+  display: block;
+  overflow-x: auto;
+  padding: 0;
+  background: transparent;
+  color: #d4d4d4;
+}
+
+/* 基础语法高亮 - 加深颜色 */
+:deep(.hljs-keyword) {
+  color: #3a8bc8 !important;  /* 更深的蓝色 */
+  font-weight: 600;
+}
+
+:deep(.hljs-string) {
+  color: #c97b63;  /* 更深的橙色 */
+}
+
+:deep(.hljs-number) {
+  color: #98c590;  /* 更深的绿色 */
+}
+
+:deep(.hljs-function) {
+  color: #d4ca8a;  /* 更深的黄色 */
+}
+
+:deep(.hljs-comment) {
+  color: #5a8a4a;  /* 更深的绿色 */
+  font-style: italic;
+}
+
+:deep(.hljs-variable) {
+  color: #8bc4e8;  /* 更深的浅蓝 */
+}
+
+/* CSS 特定高亮 - 加深 */
+:deep(.hljs-attribute) {
+  color: #8bc4e8;
+}
+
+:deep(.hljs-selector) {
+  color: #c7a96d;  /* 更深的浅棕 */
+}
+
+:deep(.hljs-property) {
+  color: #8bc4e8;
+}
+
+:deep(.hljs-value) {
+  color: #c97b63;
+}
+
+:deep(.hljs-atrule) {
+  color: #b568b0;  /* 更深的紫色 */
+  font-weight: 600;
+}
+
+:deep(.hljs-rule) {
+  color: #3a8bc8;
+}
+
+:deep(.hljs-selector-class) {
+  color: #c7a96d;
+}
+
+:deep(.hljs-selector-id) {
+  color: #c7a96d;
+}
+
+:deep(.hljs-selector-tag) {
+  color: #c7a96d;
+}
+
+:deep(.hljs-selector-attr) {
+  color: #8bc4e8;
+}
+
+:deep(.hljs-selector-pseudo) {
+  color: #c7a96d;
+}
+
+/* JavaScript/TypeScript 特定 */
+:deep(.hljs-built_in) {
+  color: #d4ca8a;
+}
+
+:deep(.hljs-literal) {
+  color: #3a8bc8;
+}
+
+:deep(.hljs-params) {
+  color: #8bc4e8;
+}
+
+/* 字符串中的插值 */
+:deep(.hljs-subst) {
+  color: #d4d4d4;
+}
+
+:deep(.hljs-template-variable) {
+  color: #8bc4e8;
+}
+
+/* 标签和标签属性 */
+:deep(.hljs-tag) {
+  color: #3a8bc8;
+}
+
+:deep(.hljs-name) {
+  color: #3a8bc8;
+}
+
+:deep(.hljs-attr) {
+  color: #8bc4e8;
+}
+
+/* 运算符和标点 */
+:deep(.hljs-operator) {
+  color: #d4d4d4;
+}
+
+:deep(.hljs-punctuation) {
+  color: #d4d4d4;
+}
+
+/* JSON 特定 */
+:deep(.hljs-meta) {
+  color: #b568b0;
+}
+
+:deep(.hljs-meta-keyword) {
+  color: #b568b0;
+}
+
+:deep(.hljs-meta-string) {
+  color: #c97b63;
+}
+
+/* 强调 */
+:deep(.hljs-strong) {
+  font-weight: bold;
+}
+
+:deep(.hljs-emphasis) {
+  font-style: italic;
+}
+
+/* 代码块内的标记样式 */
+:deep(.hljs-section) {
+  color: #d4ca8a;
+}
+
+:deep(.hljs-bullet) {
+  color: #d4d4d4;
+}
+
+:deep(.hljs-code) {
+  color: #d4d4d4;
+}
+
+/* 文档注释 */
+:deep(.hljs-doctag) {
+  color: #5a8a4a;
+}
+
+:deep(.hljs-formula) {
+  color: #d4d4d4;
+}

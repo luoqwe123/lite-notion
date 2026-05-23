@@ -12,6 +12,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     Btn: typeof import('./src/components/btn.vue')['default']
+    CodeBlockNodeView: typeof import('./src/components/Tiptap/CodeBlockNodeView.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElForm: typeof import('element-plus/es')['ElForm']
     ElFormItem: typeof import('element-plus/es')['ElFormItem']
@@ -21,8 +22,9 @@ declare module 'vue' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     ShowIcon: typeof import('./src/components/showIcon.vue')['default']
-    Test: typeof import('./src/components/LoginFrom/test.vue')['default']
+    Test: typeof import('./src/components/test.vue')['default']
     ThemeToggle: typeof import('./src/components/ThemeToggle.vue')['default']
-    Tiptap: typeof import('./src/components/Tiptap.vue')['default']
+    Tiptap: typeof import('./src/components/Tiptap/Tiptap.vue')['default']
+    Toolbar: typeof import('./src/components/Tiptap/Toolbar/index.vue')['default']
   }
 }
