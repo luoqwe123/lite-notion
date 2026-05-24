@@ -1,71 +1,60 @@
-
-
 <template>
   <div class="editor-toolbar w-full">
-    <!-- 基础格式 -->
+    <!--清除样式-->
     <div class="toolbar-group">
-      <button
-        v-for="item in toolbarItems"
-        :key="item.name"
-        :class="{ active: isActive(item.name) }"
-        @click="item.action"
-      >
+      
+      <button v-for="item in clearItems" :key="item.label" 
+        @click="item.action">
         {{ item.label }}
       </button>
+      <div class="toolbar-divider" />
+    </div>
+    <!-- 基础格式 -->
+    <div class="toolbar-group">
+      
+      <button v-for="item in toolbarItems" :key="item.name" :class="{ active: isActive(item.name) }"
+        @click="item.action">
+        {{ item.label }}
+      </button>
+      <div class="toolbar-divider" />
     </div>
 
-    <div class="toolbar-divider" />
+
 
     <!-- 标题 -->
     <div class="toolbar-group">
-      <button
-        v-for="item in headingItems"
-        :key="item.level"
+      <button v-for="item in headingItems" :key="item.level"
         :class="{ active: isActive('heading', { level: item.level }) }"
-        @click="() => props.editor?.chain().focus().toggleHeading({ level: item.level as 1 | 2 | 3 }).run()"
-      >
+        @click="() => props.editor?.chain().focus().toggleHeading({ level: item.level as 1 | 2 | 3 }).run()">
         {{ item.label }}
       </button>
+      <div class="toolbar-divider" />
     </div>
 
-    <div class="toolbar-divider" />
+
 
     <!-- 列表 -->
     <div class="toolbar-group">
-      <button
-        v-for="item in listItems"
-        :key="item.name"
-        :class="{ active: isActive(item.name) }"
-        @click="item.action"
-      >
+      <button v-for="item in listItems" :key="item.name" :class="{ active: isActive(item.name) }" @click="item.action">
         {{ item.label }}
       </button>
+      <div class="toolbar-divider" />
     </div>
 
-    <div class="toolbar-divider" />
+
 
     <!-- 块级元素 -->
     <div class="toolbar-group">
-      <button
-        v-for="item in blockItems"
-        :key="item.name"
-        :class="{ active: isActive(item.name) }"
-        @click="item.action"
-      >
+      <button v-for="item in blockItems" :key="item.name" :class="{ active: isActive(item.name) }" @click="item.action">
         {{ item.label }}
       </button>
+      <div class="toolbar-divider" />
     </div>
 
-    <div class="toolbar-divider" />
+
 
     <!-- 图片 -->
-      <input
-      ref="fileInputRef"
-      type="file"
-      accept="image/*"
-      style="display: none"
-      @change="handleFileSelect"
-    />
+    <input ref="fileInputRef" type="file" accept="image/*" style="display: none" @change="handleFileSelect" />
     <div class="toolbar-group">
       <button @click="handleUpdateFile">
         图片上传
@@ -86,18 +75,18 @@ interface Props {
 const props = defineProps<Props>()
 
 const emit = defineEmits<{
-  imageUpload: [File:File]
+  imageUpload: [File: File]
 }>()
 
 const fileInputRef = useTemplateRef("fileInputRef");
-const handleUpdateFile = ()=>{
-    fileInputRef.value?.click()
+const handleUpdateFile = () => {
+  fileInputRef.value?.click()
 }
 
 const handleFileSelect = async (e: Event) => {
   const file = (e.target as HTMLInputElement).files?.[0]
   if (!file) return
-  emit("imageUpload",file)
+  emit("imageUpload", file)
 }
 const toolbarItems = [
   { name: 'bold', label: '粗体', action: () => props.editor?.chain().focus().toggleBold().run() },
@@ -122,7 +111,9 @@ const blockItems = [
   { name: 'blockquote', label: '引用', action: () => props.editor?.chain().focus().toggleBlockquote().run() },
   { name: 'taskList', label: '任务列表', action: () => props.editor?.chain().focus().toggleTaskList().run() },
 ]
-
+const clearItems = [
+  { label:"清除格式" ,action:()=> props.editor?.chain().focus().unsetAllMarks().run()}  // 清除所有「行内样式」（加粗、斜体、颜色、链接等）
+]
 const isActive = (name: string, options?: Record<string, any>) => {
   return props.editor?.isActive(name, options) || false
 }
@@ -134,9 +125,9 @@ const isActive = (name: string, options?: Record<string, any>) => {
   flex-wrap: wrap;
   gap: 4px;
   padding: 8px 12px;
-  justify-content: space-around;
+  justify-content: left;
   background: var(--toolbar-bg);
-//   border-bottom: 1px solid var(--toolbar-border);
+  //   border-bottom: 1px solid var(--toolbar-border);
 }
 
 .toolbar-group {
@@ -170,6 +161,4 @@ button {
     border-color: var(--btn-active-border, #1677ff);
   }
 }
-
-
 </style>

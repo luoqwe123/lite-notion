@@ -13,7 +13,7 @@
       <textarea v-model="title" placeholder="请输入标题" class="title-textarea" name="title" 
       :disabled="!editorStore.editor"  
       @input="autoResizeTextarea"></textarea>
-      <editor-content :editor="editor"   ref="editorContentRef" draggable="true" />
+      <editor-content :editor="editor"   ref="editorContentRef" draggable="false" />
     </div>
   </div>
 </template>
@@ -162,6 +162,10 @@ onMounted(() => {
   el.addEventListener('paste', handlePaste)
   el.addEventListener('drop', handleDrop)
   el.addEventListener('dragover', handleDragOver)
+   // 关键：禁止编辑器内部内容被拖拽
+  el.addEventListener('dragstart', (e) => {
+    e.preventDefault()
+  })
 })
 onBeforeUnmount(() => {
   const el = editorContentRef.value?.rootEl as HTMLElement | null
@@ -170,6 +174,7 @@ onBeforeUnmount(() => {
   el.removeEventListener('paste', handlePaste)
   el.removeEventListener('drop', handleDrop)
   el.removeEventListener('dragover', handleDragOver)
+   el.removeEventListener('dragstart', (e) => e.preventDefault())
 })
 
 </script>

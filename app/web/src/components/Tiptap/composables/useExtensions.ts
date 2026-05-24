@@ -13,7 +13,8 @@ import typescript from 'highlight.js/lib/languages/typescript'
 import css from 'highlight.js/lib/languages/css'
 import xml from 'highlight.js/lib/languages/xml'
 import json from 'highlight.js/lib/languages/json'
-
+import { Collaboration } from '@tiptap/extension-collaboration'
+import { CollaborationCursor } from '@tiptap/extension-collaboration-cursor'
 // 导入 NodeView 组件
 import CodeBlockNodeView from '../CodeBlockNodeView.vue'
 
@@ -53,6 +54,7 @@ export const CustomCodeBlock = CodeBlockLowlight.extend({
 
 // 所有扩展配置
 export const getExtensions = () => [
+ 
   StarterKit.configure({
     heading: { levels: [1, 2, 3] },
     codeBlock: false, // 使用自定义代码块
@@ -66,7 +68,7 @@ export const getExtensions = () => [
   //   minWidth: 100,
   //   maxWidth: 800
   // }),
-   Image.configure({
+  Image.configure({
     allowBase64: false,
     HTMLAttributes: { class: 'tiptap-img' },
   }),
