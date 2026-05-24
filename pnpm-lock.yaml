@@ -11,12 +11,6 @@ importers:
       '@nestjs/cli':
         specifier: ^11.0.21
         version: 11.0.21(@types/node@25.6.0)(prettier@3.8.3)
-      browser-image-compression:
-        specifier: ^2.0.2
-        version: 2.0.2
-      tiptap-extension-resizable:
-        specifier: ^1.1.1
-        version: 1.1.1(@tiptap/pm@3.23.5)
     devDependencies:
       prisma-merge:
         specifier: ^0.2.0
@@ -193,6 +187,9 @@ importers:
       '@tiptap/vue-3':
         specifier: ^3.23.5
         version: 3.23.5(@floating-ui/dom@1.7.6)(@tiptap/core@3.23.5(@tiptap/pm@3.23.5))(@tiptap/pm@3.23.5)(vue@3.5.33(typescript@6.0.3))
+      browser-image-compression:
+        specifier: ^2.0.2
+        version: 2.0.2
       element-plus:
         specifier: ^2.13.7
         version: 2.13.7(typescript@6.0.3)(vue@3.5.33(typescript@6.0.3))
@@ -202,6 +199,9 @@ importers:
       lowlight:
         specifier: ^3.3.0
         version: 3.3.0
+      tiptap-extension-resizable:
+        specifier: ^1.1.1
+        version: 1.1.1(@tiptap/pm@3.23.5)
     devDependencies:
       '@types/sass':
         specifier: ^1.45.0
