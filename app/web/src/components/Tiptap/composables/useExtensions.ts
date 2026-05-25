@@ -15,6 +15,8 @@ import xml from 'highlight.js/lib/languages/xml'
 import json from 'highlight.js/lib/languages/json'
 import { Collaboration } from '@tiptap/extension-collaboration'
 import { CollaborationCursor } from '@tiptap/extension-collaboration-cursor'
+import { WebsocketProvider } from "y-websocket"
+import * as Y from 'yjs'
 // 导入 NodeView 组件
 import CodeBlockNodeView from '../CodeBlockNodeView.vue'
 
@@ -51,10 +53,14 @@ export const CustomCodeBlock = CodeBlockLowlight.extend({
   },
 })
 
+// 1. Yjs 文档
+const ydoc = new Y.Doc()
 
+// 2. 连接后端 websocket
+const provider = new WebsocketProvider('ws://localhost:3000', 'tiptap-collab-room', ydoc)
 // 所有扩展配置
 export const getExtensions = () => [
- 
+
   StarterKit.configure({
     heading: { levels: [1, 2, 3] },
     codeBlock: false, // 使用自定义代码块
@@ -90,5 +96,17 @@ export const getExtensions = () => [
     lowlight,
     defaultLanguage: 'javascript',
     languageClassPrefix: 'language-',
+  }),
+  // 协同核心
+  Collaboration.configure({
+    document: ydoc,
+  }),
+  // 光标同步
+  CollaborationCursor.configure({
+    provider,
+    user: {
+      name: '用户' + Math.random().toString(36).slice(2, 6),
+      color: '#' + Math.floor(Math.random() * 16777215).toString(16),
+    },
   }),
 ]

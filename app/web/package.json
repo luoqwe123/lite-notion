@@ -46,7 +46,7 @@
     "highlight.js": "^11.11.1",
     "lowlight": "^3.3.0",
     "tiptap-extension-resizable": "^1.1.1",
-    "websocket": "^1.0.35",
+    "y-websocket": "^3.0.0",
     "yjs": "^13.6.30"
   }
 }
