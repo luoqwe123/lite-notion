@@ -1,5 +1,5 @@
 
-import * as data from "./testData"
+import * as data from "./testData.js"
 import { PrismaClient } from "@prisma/client";
 import "dotenv/config";
 import { PrismaMariaDb } from '@prisma/adapter-mariadb';

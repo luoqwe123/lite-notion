@@ -1,19 +1,22 @@
 {
   "compilerOptions": {
     "strict": true,
-    "module": "node16",
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "esModuleInterop": true,
-    "moduleResolution": "node16",  
+    "allowSyntheticDefaultImports": true,
     "isolatedModules": true,
-  
+
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "target": "es2021",
+
     "sourceMap": true,
     "outDir": "./dist",
+    "rootDir": "./src",
+
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": false,
@@ -21,9 +24,14 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
+    "allowImportingTsExtensions": false,
+    "rewriteRelativeImportExtensions": false,
+    "types": ["node"],
+
+    // 不要 baseUrl！
     "paths": {
       "@/*": ["./src/*"]
     }
-    
-  }
+  },
+  "include": ["src/**/*"]
 }

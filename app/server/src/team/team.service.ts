@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '@/prisma/prisma.service';
-import BaseDto from './dto/base.dto'
-import CreateDto from './dto/create.dto';
-import UpdateDto from './dto/update.dto';
-import { Role } from '@/common/constants';
+import { PrismaService } from '@/prisma/prisma.service.js';
+import BaseDto from './dto/base.dto.js'
+import CreateDto from './dto/create.dto.js';
+import UpdateDto from './dto/update.dto.js';
+import { Role } from '@/common/constants.js';
 @Injectable()
 export class teamService {
      constructor(private prisma: PrismaService,) { }

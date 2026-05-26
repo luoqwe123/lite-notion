@@ -1,6 +1,6 @@
-import { PrismaService } from '@/prisma/prisma.service';
+import { PrismaService } from '@/prisma/prisma.service.js';
 import { Injectable } from '@nestjs/common';
-import { createDto, deleteDto, findDto, updateDto } from './dto/common.dto';
+import { createDto, deleteDto, findDto, updateDto } from './dto/common.dto.js';
 
 @Injectable()
 export class documentService {
@@ -27,7 +27,7 @@ export class documentService {
           })
      }
      update(data: updateDto) {
-          let { id, title, status, teamId } = data;
+          let { id, title, status, teamId, content } = data;
           return this.prisma.document.update({
                where: {
                     id: +id,
@@ -35,7 +35,8 @@ export class documentService {
                },
                data: {
                     ...(title && { title }),
-                    ...(status && { status })
+                    ...(status && { status }),
+                    ...(content && { content })
                }
           })
      }
@@ -57,12 +58,30 @@ export class documentService {
                },
           })
      }
-     findOne(id:number){
+     findOne(id: number) {
           return this.prisma.document.findUnique({
-               where:{
+               where: {
                     id
                }
           })
+     }
+     checkPermission(id: number, teamId: number, userId: number) {
+          return this.prisma.document.findFirst({
+               where: {
+                    id,
+                    kb: {
+                         teamId,
+                         team: {
+                              members: {
+                                   some: {
+                                        userId
+                                   }
+                              }
+                         }
+                    }
+               }
+          });
+
      }
 
 }

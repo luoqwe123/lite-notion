@@ -1,6 +1,6 @@
 // team.guard.ts
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
-import { PrismaService } from '@/prisma/prisma.service';
+import { PrismaService } from '@/prisma/prisma.service.js';
 
 @Injectable()
 class TeamGuard implements CanActivate {
@@ -28,16 +28,39 @@ class TeamGuard implements CanActivate {
 
         if (!teamId) return false;
         // 根据不同表，查询用户是否在团队
-        let hasPermission = await this.prisma[this.tableName].findFirst({
-            where: { id, teamId },
-            team: {
-                members: {
-                    some: {
-                        userId
+        let hasPermission: any;
+        if (this.tableName === 'document') {
+            hasPermission = await this.prisma.document.findFirst({
+                where: {
+                    id,
+                    kb: {
+                        teamId,
+                        team: {
+                            members: {
+                                some: {
+                                    userId
+                                }
+                            }
+                        }
                     }
                 }
-            }
-        });
+            });
+        } else {
+            hasPermission = await this.prisma[this.tableName].findFirst({
+                where: {
+                    id, teamId,
+                    team: {
+                        members: {
+                            some: {
+                                userId
+                            }
+                        }
+                    }
+                },
+
+            });
+        }
+
 
 
         return hasPermission;

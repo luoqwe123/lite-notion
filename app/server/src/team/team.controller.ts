@@ -1,11 +1,11 @@
 import { Body, Controller, Get, Post, UseGuards,Request, Param, Query, Delete, Patch} from '@nestjs/common';
-import { teamService } from './team.service';
-import BaseDto from './dto/base.dto';
-import  { JwtAuthGuard } from "@/auth/guard/auth.guard"
-import CreateDto from './dto/create.dto';
-import { roleWeight } from '@/auth/decorator/role.decorator';
-import { Role, RoleWeight } from '@/common/constants';
-import UpdateDto from './dto/update.dto';
+import { teamService } from './team.service.js';
+import BaseDto from './dto/base.dto.js';
+import  { JwtAuthGuard } from "@/auth/guard/auth.guard.js"
+import CreateDto from './dto/create.dto.js';
+import { roleWeight } from '@/auth/decorator/role.decorator.js';
+import { Role, RoleWeight } from '@/common/constants.js';
+import UpdateDto from './dto/update.dto.js';
 
 @UseGuards(JwtAuthGuard)
 @Controller("team")

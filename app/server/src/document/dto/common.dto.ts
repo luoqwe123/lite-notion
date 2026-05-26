@@ -1,10 +1,10 @@
-import { DocumentStatus } from "@/common/constants"
+import { DocumentStatus } from "@/common/constants.js"
 import { IsNotEmpty } from "class-validator"
 
 
 class baseDto {
     @IsNotEmpty({ message: "团队id不能为空" })
-    teamId: string
+    teamId: string|number
 }
 
 export class createDto extends baseDto {
@@ -34,8 +34,8 @@ export class findDto extends baseDto {
 
 export class updateDto extends baseDto {
     @IsNotEmpty({ message: "文档id不能为空" })
-    id: string
-
-    title: string
-    status: DocumentStatus
+    id: string | number
+    content?:string
+    title?: string
+    status?: DocumentStatus
 }

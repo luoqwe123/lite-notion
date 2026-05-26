@@ -3,8 +3,8 @@ import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 
 import { User } from "@prisma/client";
-import { PrismaService } from '@/prisma/prisma.service';
-import { RoleWeight,Role } from "@/common/constants"
+import { PrismaService } from '@/prisma/prisma.service.js';
+import { RoleWeight,Role } from "@/common/constants.js"
 import { Request } from 'express';
 
 interface CustomRequest extends Request {

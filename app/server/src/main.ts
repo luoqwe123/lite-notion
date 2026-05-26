@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { ResponseInterceptor } from './response.inteceptors';
-import { Validate } from '@/common/validate';
+import { AppModule } from './app.module.js';
+import { ResponseInterceptor } from './response.inteceptors.js';
+import { Validate } from '@/common/validate.js';
 import { WsAdapter } from '@nestjs/platform-ws'
 
 async function bootstrap() {
