@@ -1,4 +1,4 @@
-import { DocumentStatus } from "@/common/constants.js"
+import { DocumentStatus } from "@/common/constants"
 import { IsNotEmpty } from "class-validator"
 
 

@@ -1,11 +1,11 @@
 import { Body, Controller, Delete, Get, Patch, Post, Query, UseGuards,Request } from '@nestjs/common';
-import { teamMemberService } from './teamMember.service.js';
-import { findDto } from './dto/find.dto.js';
-import { baseDto, memberDto } from './dto/common.dto.js';
-import { JwtAuthGuard } from '@/auth/guard/auth.guard.js';
-import { roleWeight } from '@/auth/decorator/role.decorator.js';
-import { RoleWeight } from '@/common/constants.js';
-import { createTeamGuard } from '@/auth/guard/member.guard.js';
+import { teamMemberService } from './teamMember.service';
+import { findDto } from './dto/find.dto';
+import { baseDto, memberDto } from './dto/common.dto';
+import { JwtAuthGuard } from '@/auth/guard/auth.guard';
+import { roleWeight } from '@/auth/decorator/role.decorator';
+import { RoleWeight } from '@/common/constants';
+import { createTeamGuard } from '@/auth/guard/member.guard';
 
 
 @UseGuards(JwtAuthGuard,createTeamGuard("teamMember",{exclude:["create"]}))

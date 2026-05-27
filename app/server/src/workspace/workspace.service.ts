@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '@/prisma/prisma.service.js';
-import { baseDto, commonDto, findDto,  } from './dto/common.dto.js';
-import { idToNum } from '@/utils/idToNum.js';
+import { PrismaService } from '@/prisma/prisma.service';
+import { baseDto, commonDto, findDto,  } from './dto/common.dto';
+import { idToNum } from '@/utils/idToNum';
 
 @Injectable()
 export class workspaceService {

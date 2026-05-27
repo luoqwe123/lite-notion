@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '@/prisma/prisma.service.js';
-import { findDto } from './dto/find.dto.js';
-import { idToNum } from '@/utils/idToNum.js';
-import { baseDto, memberDto } from './dto/common.dto.js';
-import { Role } from '@/common/constants.js';
+import { PrismaService } from '@/prisma/prisma.service';
+import { findDto } from './dto/find.dto';
+import { idToNum } from '@/utils/idToNum';
+import { baseDto, memberDto } from './dto/common.dto';
+import { Role } from '@/common/constants';
 
 @Injectable()
 export class teamMemberService {

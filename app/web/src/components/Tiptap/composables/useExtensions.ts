@@ -57,7 +57,14 @@ export const CustomCodeBlock = CodeBlockLowlight.extend({
 const ydoc = new Y.Doc()
 
 // 2. 连接后端 websocket
-const provider = new WebsocketProvider('ws://localhost:3000', 'tiptap-collab-room', ydoc)
+const provider = new WebsocketProvider('ws://localhost:3000/document', 'doc-7', ydoc, {
+  connect: true,
+  params: {
+    teamId: "6",
+    docId: "7"
+
+  }
+})
 // 所有扩展配置
 export const getExtensions = () => [
 

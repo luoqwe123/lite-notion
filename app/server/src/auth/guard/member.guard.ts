@@ -1,6 +1,6 @@
 // team.guard.ts
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
-import { PrismaService } from '@/prisma/prisma.service.js';
+import { PrismaService } from '@/prisma/prisma.service';
 
 @Injectable()
 class TeamGuard implements CanActivate {

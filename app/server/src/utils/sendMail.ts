@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 import "dotenv/config";
-import { emailLog } from "./genLog.js"
+import { emailLog } from "./genLog"
 // console.log(process.env)
 
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '@/prisma/prisma.service.js';
-import { createDto } from './dto/common.dto.js';
+import { PrismaService } from '@/prisma/prisma.service';
+import { createDto } from './dto/common.dto';
 
 @Injectable()
 export class favoriteService {

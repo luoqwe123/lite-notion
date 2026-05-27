@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { workspaceController } from './workspace.controller.js';
-import { workspaceService } from './workspace.service.js';
+import { workspaceController } from './workspace.controller';
+import { workspaceService } from './workspace.service';
 
 @Module({
   imports: [],

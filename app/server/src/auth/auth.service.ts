@@ -1,11 +1,11 @@
-import { PrismaService } from '@/prisma/prisma.service.js';
+import { PrismaService } from '@/prisma/prisma.service';
 import type { User } from '@prisma/client';
 import { Injectable, BadRequestException, Res } from '@nestjs/common';
 import { JwtService } from "@nestjs/jwt"
-import LoginDto, { baseDto } from './dto/login.dto.js';
+import LoginDto, { baseDto } from './dto/login.dto';
 import { verify } from 'argon2';
-import { sendMail } from '@/utils/sendMail.js';
-import registerDto from './dto/register.dto.js';
+import { sendMail } from '@/utils/sendMail';
+import registerDto from './dto/register.dto';
 import type { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 
