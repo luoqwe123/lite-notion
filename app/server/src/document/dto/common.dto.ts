@@ -32,7 +32,7 @@ export class findDto extends baseDto {
     content: string
 }
 
-export class updateDto extends baseDto {
+export class updateDto {
     @IsNotEmpty({ message: "文档id不能为空" })
     id: string | number
     content?:string

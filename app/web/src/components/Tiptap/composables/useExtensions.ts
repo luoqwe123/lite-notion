@@ -13,12 +13,21 @@ import typescript from 'highlight.js/lib/languages/typescript'
 import css from 'highlight.js/lib/languages/css'
 import xml from 'highlight.js/lib/languages/xml'
 import json from 'highlight.js/lib/languages/json'
-import { Collaboration } from '@tiptap/extension-collaboration'
-import { CollaborationCursor } from '@tiptap/extension-collaboration-cursor'
+
 import { WebsocketProvider } from "y-websocket"
 import * as Y from 'yjs'
+
+import { toUint8Array } from 'js-base64'
+import { useEditorStore } from "~/stores/modules/editor"
+
+
+// import { CollaborationCursor } from '@tiptap/extension-collaboration-cursor'
 // 导入 NodeView 组件
 import CodeBlockNodeView from '../CodeBlockNodeView.vue'
+import { reactive } from 'vue'
+
+
+const editorStore = useEditorStore()
 
 // 创建 lowlight 实例
 export const lowlight = createLowlight()
@@ -52,68 +61,93 @@ export const CustomCodeBlock = CodeBlockLowlight.extend({
     return VueNodeViewRenderer(CodeBlockNodeView)
   },
 })
+// provider 真正就绪的标志（必须等这两个）
+// provider.wsconnected === true（WebSocket 握手完成）
+// provider.synced === true（和服务端同步完成）
 
-// 1. Yjs 文档
-const ydoc = new Y.Doc()
+export function getYandProvider() {
+  const ydoc = new Y.Doc()
 
-// 2. 连接后端 websocket
-const provider = new WebsocketProvider('ws://localhost:3000/document', 'doc-7', ydoc, {
-  connect: true,
-  params: {
-    teamId: "6",
-    docId: "7"
-
+  function loadYjsDocument(data: string) {
+    if(data.length) Y.applyUpdate(ydoc, toUint8Array(data))
   }
-})
-// 所有扩展配置
-export const getExtensions = () => [
 
-  StarterKit.configure({
-    heading: { levels: [1, 2, 3] },
-    codeBlock: false, // 使用自定义代码块
-    listItem: {},
-    bulletList: {},
-    orderedList: {},
-  }),
-  // 只使用 ImageResize，不要同时配置 Image 扩展
+  // 2. 连接后端 websocket
+  const docId = editorStore.id;
+  const provider = new WebsocketProvider('ws://localhost:3000/document', `doc-${docId}`, ydoc, {
+    connect: true,
+    params: {
+      teamId: "6",
+      docId
+    }
+  })
 
-  // CustomImageResize.configure({
-  //   minWidth: 100,
-  //   maxWidth: 800
-  // }),
-  Image.configure({
-    allowBase64: false,
-    HTMLAttributes: { class: 'tiptap-img' },
-  }),
-  Resizable.configure({
-    types: ["image", "video"], // resizable type
-    handlerStyle: { // handler point style
-      width: "6px",
-      height: "6px",
-      background: "#07c160",
-    },
-    layerStyle: { // layer mask style
-      border: "1px solid #07c160",
-    },
-  }),
-  ListTabHandler,
-  TaskList,
-  TaskItem.configure({ nested: true }),
-  CustomCodeBlock.configure({
-    lowlight,
-    defaultLanguage: 'javascript',
-    languageClassPrefix: 'language-',
-  }),
-  // 协同核心
-  Collaboration.configure({
-    document: ydoc,
-  }),
-  // 光标同步
-  CollaborationCursor.configure({
+
+  // provider.on("status", (event) => {
+  //   console.log("staus", event.status)
+  //   console.log(provider)
+  // })
+
+  // provider.awareness.on('change', () => {
+  //   const users = Array.from(provider.awareness.getStates().entries())
+  //     .map(([id, state]) => ({ id, ...state.user }));
+  //   console.log('在线用户：', users);
+  // });
+
+
+  return {
+    ydoc,
     provider,
-    user: {
-      name: '用户' + Math.random().toString(36).slice(2, 6),
-      color: '#' + Math.floor(Math.random() * 16777215).toString(16),
-    },
-  }),
-]
+    loadYjsDocument
+  }
+}
+
+
+
+// 所有扩展配置
+export const getExtensions = () => {
+
+  return [
+    StarterKit.configure({
+      heading: { levels: [1, 2, 3] },
+      codeBlock: false, // 使用自定义代码块
+      listItem: {},
+      bulletList: {},
+      orderedList: {},
+      undoRedo: false,
+    }),
+    // 只使用 ImageResize，不要同时配置 Image 扩展
+
+    // CustomImageResize.configure({
+    //   minWidth: 100,
+    //   maxWidth: 800
+    // }),
+    Image.configure({
+      allowBase64: false,
+      HTMLAttributes: { class: 'tiptap-img' },
+    }),
+    Resizable.configure({
+      types: ["image", "video"], // resizable type
+      handlerStyle: { // handler point style
+        width: "6px",
+        height: "6px",
+        background: "#07c160",
+      },
+      layerStyle: { // layer mask style
+        border: "1px solid #07c160",
+      },
+    }),
+    ListTabHandler,
+    TaskList,
+    TaskItem.configure({ nested: true }),
+    CustomCodeBlock.configure({
+      lowlight,
+      defaultLanguage: 'javascript',
+      languageClassPrefix: 'language-',
+    }),
+   
+
+  ]
+
+
+}

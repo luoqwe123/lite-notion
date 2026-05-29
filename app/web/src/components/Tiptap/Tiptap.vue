@@ -1,34 +1,38 @@
 <template>
   <div class="tiptap-editor-wrapper ">
-    <!-- 工具栏 -->
-    <div class="toolbar w-full">
-      <Toolbal :editor="editor!" @image-upload="uploadImage" />
 
-    </div>
+    <div class="preview" v-if="!editorState">{{ curDocContent }}</div>
+    <template v-else>
+      <!-- 工具栏 -->
+      <div class="toolbar w-full">
+        <Toolbal :editor="OEditor!" @image-upload="uploadImage" />
 
+      </div>
+      <!-- 编辑器内容区域 -->
+      <div class="editor-content-box w-full">
+        <textarea v-model="title" placeholder="请输入标题" class="title-textarea" name="title" :disabled="!editorState"
+          @input="autoResizeTextarea"></textarea>
+        <editor-content :editor="editor" ref="editorContentRef" draggable="false" />
+      </div>
+    </template>
 
-
-    <!-- 编辑器内容区域 -->
-    <div class="editor-content-box w-full">
-      <textarea v-model="title" placeholder="请输入标题" class="title-textarea" name="title" 
-      :disabled="!editorStore.editor"  
-      @input="autoResizeTextarea"></textarea>
-      <editor-content :editor="editor"   ref="editorContentRef" draggable="false" />
-    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, useTemplateRef, watch, } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, useTemplateRef, watch, } from 'vue'
 import { EditorContent, } from '@tiptap/vue-3'
 import Toolbal from "./Toolbar/index.vue"
 import browserImageCompression from 'browser-image-compression'
 import { useTiptapEditor } from './composables/useTiptapEditor'
 import { useEditorStore } from '~/stores/modules/editor'
 import { ElMessage } from 'element-plus'
-
-let editorStore = useEditorStore();
-
+import { storeToRefs } from 'pinia'
+import * as Y from 'yjs';
+import { fromUint8Array } from 'js-base64'
+let editorStore = useEditorStore()
+let { id, editorState } = storeToRefs(editorStore);
+let curDocContent = ref<string>();
 
 let title = defineModel<string>("title");
 const editorContentRef = useTemplateRef<InstanceType<typeof EditorContent>>("editorContentRef");
@@ -68,7 +72,7 @@ const uploadImage = async (file: File) => {
     console.log(tempUrl)
 
     // 插入本地预览
-    editor.value?.chain().focus().setImage({ src: tempUrl,width:800  }).run()
+    OEditor.value?.chain().focus().setImage({ src: tempUrl, width: 800 }).run()
 
     // 模拟上传（替换成你的接口）
     // const realUrl = await new Promise<string>(resolve => {
@@ -81,26 +85,71 @@ const uploadImage = async (file: File) => {
   } catch (err) {
     console.log(err)
     ElMessage.error("上传失败")
-    
+
   }
 }
+const OEditor = ref<any>()
+// watch(editorState, (val) => {
+//   console.log(val)
+//   if (val) {
 
-const { editor, setContent } = useTiptapEditor({
-  initialContent: props.modelValue,
-  onUpdate: (html) => {
-    emit('update:modelValue', html)
-  },
-})
+//   }
+// },{
+//   immediate:true
+// })
 
-// 监听外部 v-model 变化
-watch(
-  () => props.modelValue,
-  (val) => {
-    if (val !== editor.value?.getHTML()) {
-      setContent(val || '<p></p>')
-    }
+const { editor, ydoc, loadYjsDocument } = useTiptapEditor(
+  {
+
+    initialContent: curDocContent.value,
   }
 )
+
+// console.log(editor)
+watch(editor, async (val) => {
+  // console.log(val)
+  let data = await editorStore.findOne(id.value);
+  curDocContent.value = data.data.content;
+  loadYjsDocument(curDocContent.value!)
+  let saveTimer: number | null = null
+
+  // Y.Doc 每次变更触发
+  ydoc.on('update', async () => {
+    if (saveTimer) clearTimeout(saveTimer)
+
+    saveTimer = window.setTimeout(async () => {
+      // 导出完整文档二进制
+      const fullBinary = Y.encodeStateAsUpdate(ydoc)
+      // Uint8Array 转 Base64（方便网络传输、数据库存储）
+      const base64Str = fromUint8Array(fullBinary)
+      let data = {
+        content: base64Str,
+        id: id.value
+      }
+      
+      // 调用后端保存接口
+      let res =  await editorStore.saveDoc(data)
+      console.log(res)
+    }, 2000)
+  })
+
+}, {
+  once: true
+})
+
+
+
+
+
+// 监听外部 v-model 变化
+// watch(
+//   () => props.modelValue,
+//   (val) => {
+//     if (val !== editor.value?.getHTML()) {
+//       setContent(val || '<p></p>')
+//     }
+//   }
+// )
 
 const autoResizeTextarea = (e: Event) => {
   const textarea = e.target as HTMLTextAreaElement
@@ -150,7 +199,7 @@ const handleDragOver = (e: DragEvent) => {
 
 
 // 一进来就初始化高度
-onMounted(() => {
+onMounted(async () => {
   const textarea = document.querySelector('.title-textarea') as HTMLTextAreaElement
   if (textarea) {
     textarea.style.height = '0'
@@ -162,7 +211,7 @@ onMounted(() => {
   el.addEventListener('paste', handlePaste)
   el.addEventListener('drop', handleDrop)
   el.addEventListener('dragover', handleDragOver)
-   // 关键：禁止编辑器内部内容被拖拽
+  // 关键：禁止编辑器内部内容被拖拽
   el.addEventListener('dragstart', (e) => {
     e.preventDefault()
   })
@@ -174,7 +223,7 @@ onBeforeUnmount(() => {
   el.removeEventListener('paste', handlePaste)
   el.removeEventListener('drop', handleDrop)
   el.removeEventListener('dragover', handleDragOver)
-   el.removeEventListener('dragstart', (e) => e.preventDefault())
+  el.removeEventListener('dragstart', (e) => e.preventDefault())
 })
 
 </script>
@@ -239,6 +288,4 @@ onBeforeUnmount(() => {
 
 
 }
-
-
 </style>

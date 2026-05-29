@@ -7,7 +7,14 @@
 <script setup lang='ts'>
 import { reactive, ref, watch } from 'vue'
 // import { TiptapEditor } from '~/components/Tiptap/index'
-
+import { useRoute } from 'vue-router';
+import { useEditorStore } from '~/stores/modules/editor'; 
+const editorStore = useEditorStore();
+const props = defineProps({
+    id:String
+})
+const route = useRoute()
+editorStore.setCurrDocId(route.params.id as string)
 
 const document = reactive({
     title:"niah",

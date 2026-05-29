@@ -7,7 +7,7 @@ import { createDto, deleteDto, findDto, updateDto } from './dto/common.dto';
 import { createTeamGuard } from '@/auth/guard/member.guard';
 
 
-@UseGuards(JwtAuthGuard,createTeamGuard("document",{exclude:["create"]}))
+// @UseGuards(JwtAuthGuard,createTeamGuard("document",{exclude:["create"]}))
 @Controller("document")
 export class documentController {
   constructor(private readonly documentService: documentService) {}
@@ -22,8 +22,8 @@ export class documentController {
   find(@Query() data:findDto){
     return this.documentService.find(data)
   }
-  @Patch()
-  @roleWeight(RoleWeight.EDITOR)
+  @Patch("update")
+  // @roleWeight(RoleWeight.EDITOR)
   update(@Body() data:updateDto){
     return this.documentService.update(data)
   }

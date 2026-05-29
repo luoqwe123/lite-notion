@@ -27,11 +27,11 @@ export class documentService {
           })
      }
      update(data: updateDto) {
-          let { id, title, status, teamId, content } = data;
+          let { id, title, status, content } = data;
           return this.prisma.document.update({
                where: {
                     id: +id,
-                    teamId: +teamId
+                    // teamId: +teamId
                },
                data: {
                     ...(title && { title }),

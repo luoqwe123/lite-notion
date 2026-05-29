@@ -23,7 +23,7 @@ class Ofetch {
   }
 
   // ==================== GET ====================
-  async get(url: string, options: GetOptions = {}) {
+  async get<T,V>(url: string, options: GetOptions = {}) :Promise<T|V> {
     const { params } = options;
     let fullUrl = this.baseUrl + url;
 
@@ -38,24 +38,24 @@ class Ofetch {
 
     const res = await fetch(fullUrl, {
       method: "GET",
-      credentials: "include", // 👈 必须！自动带cookie
+      //credentials: "include", // 👈 必须！自动带cookie
     });
 
     return this.handleResponse(res);
   }
 
   // ==================== POST ====================
-  async post(url: string, options: RequestOptions = {}) {
+  async post<T,V>(url: string, options: RequestOptions = {}):Promise<T|V> {
     return this.request("POST", url, options);
   }
 
   // ==================== DELETE ====================
-  async delete(url: string, options: RequestOptions = {}) {
+  async delete<T,V>(url: string, options: RequestOptions = {}):Promise<T|V> {
     return this.request("DELETE", url, options);
   }
 
   // ==================== PATCH ====================
-  async patch(url: string, options: RequestOptions = {}) {
+  async patch<T,V>(url: string, options: RequestOptions = {}):Promise<T|V> {
     return this.request("PATCH", url, options);
   }
 
@@ -92,7 +92,7 @@ class Ofetch {
       method,
       headers,
       body: finalBody,
-      credentials: "include", // 👈 核心！带cookie
+     // credentials: "include", // 👈 核心！带cookie
     });
 
     return this.handleResponse(res);
@@ -106,8 +106,8 @@ class Ofetch {
         throw new Error(data.message || "请求失败");
       }
       return data;
-    } catch (err) {
-      console.error("fetch 错误 →", err);
+    } catch (err:any) {
+      console.error("fetch 错误 →", err.message);
       throw err;
     }
   }
