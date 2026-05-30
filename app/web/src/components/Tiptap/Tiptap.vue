@@ -5,7 +5,7 @@
     <template v-else>
       <!-- 工具栏 -->
       <div class="toolbar w-full">
-        <Toolbal :editor="OEditor!" @image-upload="uploadImage" />
+        <Toolbal :editor="editor!" @image-upload="uploadImage" />
 
       </div>
       <!-- 编辑器内容区域 -->
@@ -30,6 +30,9 @@ import { ElMessage } from 'element-plus'
 import { storeToRefs } from 'pinia'
 import * as Y from 'yjs';
 import { fromUint8Array } from 'js-base64'
+import { uploadImg } from '~/api/update/index.js'
+import { getImageSize } from '~/utils/getImgSize.js'
+
 let editorStore = useEditorStore()
 let { id, editorState } = storeToRefs(editorStore);
 let curDocContent = ref<string>();
@@ -68,27 +71,33 @@ const uploadImage = async (file: File) => {
     if (file.size / 1024 / 1024 > IMG_CONFIG.maxSizeMB) return alert(`最大 ${IMG_CONFIG.maxSizeMB}MB`)
 
     const compressed = await browserImageCompression(file, IMG_CONFIG.compress)
-    const tempUrl = URL.createObjectURL(compressed)
-    console.log(tempUrl)
+    const tempUrl = URL.createObjectURL(compressed);
+    const { width: naturalWidth, height: naturalHeight } = await getImageSize(tempUrl)
+
+    // 你可以限制最大宽度，保持比例
+    const displayWidth = Math.min(naturalWidth, 800)
 
     // 插入本地预览
-    OEditor.value?.chain().focus().setImage({ src: tempUrl, width: 800 }).run()
-
-    // 模拟上传（替换成你的接口）
-    // const realUrl = await new Promise<string>(resolve => {
-    //   setTimeout(() => resolve(tempUrl), 800)
-    // })
+    editor.value?.chain().focus().setImage({
+      src: tempUrl, width: displayWidth, // 用计算后的宽度
+      height: naturalHeight * (displayWidth / naturalWidth),
+    }).run()
+    let res = await uploadImg(compressed);
 
     // // 替换真实地址
-    // editor.value?.chain().focus().updateAttributes('image', { withDefaults: 800 }).run()
-    // URL.revokeObjectURL(tempUrl)
+    editor.value?.chain().focus().updateAttributes('image', {
+      width: displayWidth, // 用计算后的宽度
+      height: naturalHeight * (displayWidth / naturalWidth),
+      src: res.data.url
+    }).run()
+    URL.revokeObjectURL(tempUrl)
   } catch (err) {
     console.log(err)
     ElMessage.error("上传失败")
 
   }
 }
-const OEditor = ref<any>()
+
 // watch(editorState, (val) => {
 //   console.log(val)
 //   if (val) {
@@ -126,10 +135,9 @@ watch(editor, async (val) => {
         content: base64Str,
         id: id.value
       }
-      
+
       // 调用后端保存接口
-      let res =  await editorStore.saveDoc(data)
-      console.log(res)
+      let res = await editorStore.saveDoc(data)
     }, 2000)
   })
 

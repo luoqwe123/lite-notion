@@ -7,12 +7,13 @@ import { PrismaModule } from './prisma/prisma.module';
 import { workspaceModule } from './workspace/workspace.module';
 import { teamModule } from './team/team.module';
 import { documentModule } from './document/document.module';
+import { updateModule } from './update/update.module';
 // import { CollaborationGateway } from './collaboration/collaboration.server'
 
 @Module({
   imports: [AuthModule,PrismaModule,workspaceModule,teamModule,documentModule,ConfigModule.forRoot({
     isGlobal: true
-  })],
+  }),updateModule],
   controllers: [AppController],
   providers: [AppService,],
 })

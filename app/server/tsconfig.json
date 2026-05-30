@@ -21,6 +21,9 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
+    "types": [
+      "multer"
+    ],
     // 不要 baseUrl！
     "paths": {
       "@/*": ["./src/*"]

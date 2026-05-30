@@ -8,7 +8,9 @@ import { setupYjsWebSocketServer } from './collaboration/collaboration.server';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useWebSocketAdapter(new WsAdapter(app)) // 支持 ws
-  app.useGlobalPipes(new Validate());
+  app.useGlobalPipes(new Validate({
+    skipMissingProperties: true,
+  }));
   app.useGlobalInterceptors(new ResponseInterceptor())
   app.setGlobalPrefix('api');
   app.enableCors();

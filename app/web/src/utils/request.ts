@@ -78,8 +78,10 @@ class Ofetch {
     } else if (htype === "formData") {
       finalBody = new FormData();
       Object.entries(body || {}).forEach(([k, v]) => {
+       
         finalBody.append(k, v);
       });
+     
       contentType = null; // 👈 formData 浏览器自动生成，不能手动写 Content-Type
     }
 
@@ -87,7 +89,6 @@ class Ofetch {
     if (contentType) {
       headers["Content-Type"] = contentType;
     }
-
     const res = await fetch(this.baseUrl + url, {
       method,
       headers,

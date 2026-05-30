@@ -152,7 +152,7 @@ model KnowledgeBase {
 model Document {
   id          Int        @id @default(autoincrement())
   title       String
-  content     String?
+  content     String?    @db.Text
   kbId        Int        @map("kb_id")
   teamId      Int        @map("team_id")
   parentId    Int?       @map("parent_id")

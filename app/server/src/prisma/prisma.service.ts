@@ -20,7 +20,7 @@ export class PrismaService extends PrismaClient {
         });
 
         super({
-            log: ['query'],
+            // log: ['query'],
             adapter
         })
 
