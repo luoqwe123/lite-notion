@@ -146,9 +146,10 @@ const editorList = ref<any[]>([])
 provider.awareness.on('change', () => {
   editorList.value = Array.from(provider.awareness.getStates().entries())
     .map(([id, state]) => ({ id, ...state.user }));
+  console.log(editorList.value)
 });
 
-const {  removeList }  = EditorList(editorList);
+const { removeList } = EditorList(editorList);
 
 // 监听外部 v-model 变化
 // watch(
@@ -226,7 +227,11 @@ onMounted(async () => {
   })
 })
 onBeforeUnmount(() => {
-  const el = editorContentRef.value?.rootEl as HTMLElement | null
+  provider.awareness.setLocalState(null)
+  editor.value?.destroy()
+  provider.destroy()
+  const el = editorContentRef.value?.rootEl as HTMLElement | null;
+  removeList()
   if (!el) return
 
   el.removeEventListener('paste', handlePaste)

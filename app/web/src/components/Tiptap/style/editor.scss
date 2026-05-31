@@ -8,7 +8,7 @@
       margin: 8px 0;
       border-radius: 4px;
       position: relative;
-      
+
     }
 
     // 图片调整大小的样式
@@ -133,5 +133,82 @@
           }
         }
       }
+    }
+  }
+
+
+
+  // :deep(.custom-caret-container) {
+  //   /* 外层容器：让气泡可以基于光标定位 */
+
+  //   position: relative;
+  //   display: inline-block;
+  //   pointer-events: none;
+
+  //   /* 不影响编辑器点击 */
+
+  //   /* 光标竖线 */
+  //   .custom-caret {
+  //     border-left: 2px solid;
+  //     height: 100%;
+  //     margin-left: -1px;
+  //   }
+
+  //   /* 气泡提示：实现你截图里的黑色气泡样式 */
+  //   .custom-caret-bubble {
+  //     position: absolute;
+  //     bottom: 100%;
+  //     /* ✅ 把气泡“钉”在容器的上边缘 */
+  //     left: 0;
+  //     transform: translateX(-25%);
+  //     /* 微调，让气泡居中对齐光标 */
+  //     /* 气泡基础样式 */
+  //     padding: 6px 12px;
+  //     border-radius: 6px;
+  //     color: #fff;
+  //     font-size: 12px;
+  //     white-space: nowrap;
+
+  //     /* 气泡尾巴（可选，更像提示框） */
+  //     &::after {
+  //       color: black;
+  //       content: '';
+  //       position: absolute;
+  //       bottom: -10px;
+  //       left: 50%;
+  //       transform: translateX(-50%);
+  //       border: 6px solid transparent;
+  //       border-top-color: inherit;
+  //     }
+  //   }
+  // }
+
+  :deep(.tiptap) {
+
+    /* Give a remote user a caret */
+    .collaboration-carets__caret {
+      border-left: 1px solid #0d0d0d;
+      border-right: 1px solid #0d0d0d;
+      margin-left: 1px;
+      margin-right: 1px;
+      pointer-events: none;
+      position: relative;
+      word-break: normal;
+    }
+
+    /* Render the username above the caret */
+    .collaboration-carets__label {
+      border-radius: 3px 3px 3px 0;
+      color: white;
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 600;
+      left: -1px;
+      line-height: normal;
+      padding: 0.1rem 0.3rem;
+      position: absolute;
+      top: -1.4em;
+      user-select: none;
+      white-space: nowrap;
     }
   }

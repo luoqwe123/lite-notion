@@ -17,32 +17,58 @@ export function useTiptapEditor() {
   const { ydoc, provider, loadYjsDocument } = getYandProvider();
 
 
-  const editor =useEditor({
-        extensions: [
-          ...getExtensions(),
-          Collaboration.configure({
-            document: ydoc,
-          }),
-          CollaborationCaret.configure({
-            provider,
-            user: {
-              name: '用户' + Math.random().toString(36).slice(2, 6),
-              color: '#' + Math.floor(Math.random() * 16777215).toString(16),
-            },
-          }),
-        ],
-        // content: initialContent,
-        autofocus: true,
-        editable: editorStore.editorState,
-        injectCSS: false,
+  const editor = useEditor({
+    extensions: [
+      ...getExtensions(),
+      Collaboration.configure({
+        document: ydoc,
+      }),
+      CollaborationCaret.configure({
+        provider,
+        user: {
+          name: '用户' + Math.random().toString(36).slice(2, 6),
+          color: '#' + Math.floor(Math.random() * 16777215).toString(16),
+        },
+        // 2. 🔥 自定义光标+标签（完全自由DOM）
+  //       render: (user) => {
+  //         // 外层容器：用来定位气泡
+  //         const container = document.createElement('div')
+  //         container.className = 'custom-caret-container'
 
-      })
-      
+  //         // 1. 光标（保留一根竖线，方便用户看到光标位置）
+  //         const caret = document.createElement('div')
+  //         caret.className = 'custom-caret'
+  //         caret.style.borderColor = user.color
 
+  //         // 2. 气泡提示
+  //         const bubble = document.createElement('div')
+  //         bubble.className = 'custom-caret-bubble'
+  //         bubble.style.backgroundColor = user.color
+  //         bubble.innerHTML = `
+  //   <span>${user.name} 正在编辑</span>
+  // `
+  //         console.log(caret)
+  //         // 组装结构
+  //         container.appendChild(bubble)
+  //         container.appendChild(caret)
+
+  //         return container
+  //       },
+      }),
+    ],
+    // content: initialContent,
+    autofocus: true,
+    editable: editorStore.editorState,
+    injectCSS: false,
+
+  })
+  // 当浏览器窗口关闭或者刷新时，会触发 beforeunload 事件
+  window.addEventListener('beforeunload', () => {
+    provider.awareness.setLocalState(null)
+  })
   // 清理
   onBeforeUnmount(() => {
-    editor.value?.destroy()
-    provider.destroy()
+
   })
 
   // 设置内容

@@ -45,16 +45,14 @@ const bodyWidth = document.body.clientWidth;
 //     target.style.right = `${bodyWidth - e.clientX }px`
 //     target.style.top = `${e.clientY}px`
 // }
-// 记录拖拽偏移
-let offsetX = 0
-let offsetY = 0
+
 
 function handleDrag(e: DragEvent) {
     e.preventDefault()
     let target = e.target as HTMLDivElement
     // 4. 用鼠标位置减去偏移，得到元素的新位置
-    const newLeft = e.clientX - offsetX
-    const newTop = e.clientY - offsetY
+    const newLeft = e.clientX
+    const newTop = e.clientY 
 
     target.style.right = `${bodyWidth- newLeft}px`
     target.style.top = `${newTop}px`

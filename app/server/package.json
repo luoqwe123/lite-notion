@@ -33,6 +33,7 @@
     "@nestjs/websockets": "^11.1.23",
     "@prisma/adapter-mariadb": "^7.8.0",
     "@prisma/client": "^7.8.0",
+    "@y/websocket-server": "^0.1.5",
     "argon2": "^0.44.0",
     "axios": "^1.16.1",
     "class-transformer": "^0.5.1",
@@ -47,9 +48,7 @@
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "sharp": "^0.34.5",
-    "ws": "^8.21.0",
-    "y-websocket": "^3.0.0",
-    "yjs": "^13.6.30"
+    "ws": "^8.21.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",

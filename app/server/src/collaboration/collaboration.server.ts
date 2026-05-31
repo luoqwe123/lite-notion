@@ -23,6 +23,7 @@ export function setupYjsWebSocketServer(server: Server) {
 
   // 连接处理
   wss.on('connection', (ws: WebSocket, req: Request) => {
+   
     const url = (req as any).url;
     const match = url?.match(/^\/document\/(.+?)(\?|$)/);
     if (!match) {
@@ -40,7 +41,7 @@ export function setupYjsWebSocketServer(server: Server) {
 
     // 消息广播（核心协同）
     ws.on('message', (data: Buffer) => {
-      
+
       rooms.get(room)?.forEach((client) => {
         if (client !== ws && client.readyState === WebSocket.OPEN) {
           client.send(data);
@@ -53,7 +54,7 @@ export function setupYjsWebSocketServer(server: Server) {
       const roomClients = rooms.get(room);
       if (roomClients) {
         roomClients.delete(ws);
-        // console.log("ws",ws)
+        
         if (roomClients.size === 0) {
           rooms.delete(room);
         }
