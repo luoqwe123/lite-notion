@@ -53,6 +53,7 @@ export function setupYjsWebSocketServer(server: Server) {
       const roomClients = rooms.get(room);
       if (roomClients) {
         roomClients.delete(ws);
+        // console.log("ws",ws)
         if (roomClients.size === 0) {
           rooms.delete(room);
         }

@@ -88,11 +88,7 @@ export function getYandProvider() {
   //   console.log(provider)
   // })
 
-  // provider.awareness.on('change', () => {
-  //   const users = Array.from(provider.awareness.getStates().entries())
-  //     .map(([id, state]) => ({ id, ...state.user }));
-  //   console.log('在线用户：', users);
-  // });
+ 
 
 
   return {

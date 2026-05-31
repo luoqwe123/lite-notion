@@ -12,8 +12,8 @@ interface UseTiptapEditorOptions {
 
 }
 
-export function useTiptapEditor(options?: UseTiptapEditorOptions) {
-  const { initialContent = "", } = options!;
+export function useTiptapEditor() {
+  // const { initialContent = "", } = options!;
   const { ydoc, provider, loadYjsDocument } = getYandProvider();
 
 
@@ -59,6 +59,7 @@ export function useTiptapEditor(options?: UseTiptapEditorOptions) {
     editor,
     ydoc,
     loadYjsDocument,
+    provider,
     // setContent,
     getContent,
   }

@@ -32,6 +32,7 @@ import * as Y from 'yjs';
 import { fromUint8Array } from 'js-base64'
 import { uploadImg } from '~/api/update/index.js'
 import { getImageSize } from '~/utils/getImgSize.js'
+import { EditorList } from '../ShowEditor/index.js'
 
 let editorStore = useEditorStore()
 let { id, editorState } = storeToRefs(editorStore);
@@ -107,15 +108,11 @@ const uploadImage = async (file: File) => {
 //   immediate:true
 // })
 
-const { editor, ydoc, loadYjsDocument } = useTiptapEditor(
-  {
-
-    initialContent: curDocContent.value,
-  }
-)
+const { editor, ydoc, loadYjsDocument, provider } = useTiptapEditor()
 
 // console.log(editor)
-watch(editor, async (val) => {
+// editor 初始化成功将内容添加到编辑器中
+watch(editor, async () => {
   // console.log(val)
   let data = await editorStore.findOne(id.value);
   curDocContent.value = data.data.content;
@@ -144,10 +141,14 @@ watch(editor, async (val) => {
 }, {
   once: true
 })
+const editorList = ref<any[]>([])
 
+provider.awareness.on('change', () => {
+  editorList.value = Array.from(provider.awareness.getStates().entries())
+    .map(([id, state]) => ({ id, ...state.user }));
+});
 
-
-
+const {  removeList }  = EditorList(editorList);
 
 // 监听外部 v-model 变化
 // watch(
