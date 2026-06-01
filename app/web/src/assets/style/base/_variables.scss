@@ -5,8 +5,8 @@
   --color-primary: #42b883;
   --color-text-default: #1f2937; // 深灰色文字，比纯黑更柔和
   --color-text-secondary: #4b5563; // 次要文字颜色
-  --color-background-default: #f8fafc; // 柔和的灰白色背景
-  --color-background-card: #ffffff; // 卡片背景 - 纯白
+  --color-background-default: #ffffff; // 纯白
+  --color-background-card: #f8fafc; // 卡片背景 - 柔和的灰白色
   --color-border-default: #e2e8f0;
   --gradient-start-color: #3b82f6; // blue-500
   --gradient-end-color: #a855f7; // purple-500
@@ -18,12 +18,12 @@
   /* 编辑器背景 */
   --editor-bg: #ffffff;
   --editor-color: #333333;
-  
+
   /* 工具栏 */
   --toolbar-bg: #fafafa;
   --toolbar-border: #eeeeee;
   --toolbar-divider: #dddddd;
-  
+
   /* 按钮 */
   --btn-bg: #ffffff;
   --btn-color: #333333;
@@ -32,11 +32,11 @@
   --btn-active-bg: #e8f3ff;
   --btn-active-color: #1677ff;
   --btn-active-border: #1677ff;
-  
+
   /* 内容区域 */
   --content-bg: #ffffff;
   --content-color: #333333;
-  
+
   /* 代码块 */
   --code-bg: #f5f5f5;
   --code-color: #333333;
@@ -45,17 +45,24 @@
   --code-copy-hover-color: #333333;
   --code-lang-color: #999999;
   --code-lang-hover-color: #666666;
-  
+
   /* 引用块 */
   --blockquote-border: #eeeeee;
   --blockquote-color: #666666;
-  
+
   /* 列表 */
   --list-marker-color: #333333;
-  
+
   /* 任务列表 */
   --task-checkbox-color: #00b42a;
   --task-checked-color: #999999;
+
+  /*菜单所需变量 */
+  --menu-bg: #fafafa;
+  --menu-text: #1f2937;
+  --menu-active-text: #42b883;
+  --menu-hover-bg: #eff0f0;
+  --menu-border: #e2e8f0;
 }
 
 .dark {
@@ -63,8 +70,8 @@
   --color-primary: #66cc99;
   --color-text-default: #f3f4f6; // 柔和的白色文字
   --color-text-secondary: #9ca3af; // 次要文字颜色
-  --color-background-default: #0f172a; // 深蓝黑色背景
-  --color-background-card: #1e293b; // 卡片背景 - 稍亮的深蓝灰
+  --color-background-default: #1e293b; // 深蓝黑色背景
+  --color-background-card: #0f172a; // 卡片背景 - 稍亮的深蓝灰
   --color-border-default: #334155;
   --gradient-start-color: #60a5fa; // blue-400 (lighter for dark mode)
   --gradient-end-color: #c084fc; // purple-400 (lighter for dark mode)
@@ -77,12 +84,12 @@
   /* 编辑器背景 */
   --editor-bg: #1e1e1e;
   --editor-color: #d4d4d4;
-  
+
   /* 工具栏 */
   --toolbar-bg: #1e1e1e;
   --toolbar-border: #333333;
   --toolbar-divider: #444444;
-  
+
   /* 按钮 */
   --btn-bg: #2d2d2d;
   --btn-color: #d4d4d4;
@@ -91,11 +98,11 @@
   --btn-active-bg: #094771;
   --btn-active-color: #ffffff;
   --btn-active-border: #007acc;
-  
+
   /* 内容区域 */
   --content-bg: #1e1e1e;
   --content-color: #d4d4d4;
-  
+
   /* 代码块 */
   --code-bg: #2d2d2d;
   --code-color: #d4d4d4;
@@ -104,17 +111,24 @@
   --code-copy-hover-color: #d4d4d4;
   --code-lang-color: #858585;
   --code-lang-hover-color: #d4d4d4;
-  
+
   /* 引用块 */
   --blockquote-border: #444444;
   --blockquote-color: #999999;
-  
+
   /* 列表 */
   --list-marker-color: #d4d4d4;
-  
+
   /* 任务列表 */
   --task-checkbox-color: #00b42a;
   --task-checked-color: #666666;
+
+  /* 菜单所需变量 */
+  --menu-bg: #1e293b;
+  --menu-text: #e5e7eb;
+  --menu-active-text: #42b883;
+  --menu-hover-bg: #273449;
+  --menu-border: #334155;
 }
 
 ::view-transition-new(root),
