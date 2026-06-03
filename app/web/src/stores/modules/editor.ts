@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import  { updateType ,updateDoc,getDocById} from "~/api/document";
+import  { updateType ,updateDoc,getDocById, findAllDoc} from "~/api/document";
 
 
 export const useEditorStore = defineStore("editorStore", {
@@ -24,6 +24,9 @@ export const useEditorStore = defineStore("editorStore", {
         } ,  
         saveDoc(data:updateType){
             return updateDoc(data)
+        },
+        getAllDoc(kbId:string){
+            return findAllDoc(kbId)
         }
 
     }

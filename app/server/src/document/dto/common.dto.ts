@@ -23,11 +23,11 @@ export class deleteDto extends baseDto {
 
 }
 
-export class findDto extends baseDto {
+export class findDto  {
     id:string
     @IsNotEmpty({ message: "空间id不能为空" })
     kbId: string
-
+    teamId:string|undefined
     title: string
     content: string
 }

@@ -14,17 +14,18 @@ const props = defineProps({
     id:String
 })
 const route = useRoute()
+console.log(route.params.id)
 editorStore.setCurrDocId(route.params.id as string)
 
 const document = reactive({
     title:"niah",
     content:`<p>欢迎使用富文本编辑器～</p>`
 })
-watch(document,(val)=>{
-    console.log("val",val)
-},{
-    deep:true
-})
+// watch(document,(val)=>{
+//     console.log("val",val)
+// },{
+//     deep:true
+// })
 </script>
 
 <style lang="scss" scoped></style>

@@ -6,35 +6,41 @@ import { RoleWeight } from '@/common/constants';
 import { createDto, deleteDto, findDto, updateDto } from './dto/common.dto';
 import { createTeamGuard } from '@/auth/guard/member.guard';
 
-
+// interface arrayData {
+//   kbId: number[]
+// }
 // @UseGuards(JwtAuthGuard,createTeamGuard("document",{exclude:["create"]}))
 @Controller("document")
 export class documentController {
-  constructor(private readonly documentService: documentService) {}
+  constructor(private readonly documentService: documentService) { }
 
   @Post("create")
   @roleWeight(RoleWeight.EDITOR)
-  create(@Body() data:createDto){
+  create(@Body() data: createDto) {
     return this.documentService.create(data)
   }
 
-  @Get()
-  find(@Query() data:findDto){
+  @Get("findAll")
+  find(@Query() data: findDto) {
     return this.documentService.find(data)
   }
   @Patch("update")
   // @roleWeight(RoleWeight.EDITOR)
-  update(@Body() data:updateDto){
+  update(@Body() data: updateDto) {
     return this.documentService.update(data)
   }
   @Delete()
   @roleWeight(RoleWeight.ADMIN)
-  delete(@Query() data:deleteDto){
+  delete(@Query() data: deleteDto) {
     return this.documentService.delete(data)
   }
   @Get(":id")
-  findOne(@Param("id") id:string){
+  findOne(@Param("id") id: string) {
     return this.documentService.findOne(+id)
   }
+  // @Post("findAll")
+  // findAll(@Body() data: arrayData) {
 
+  //   return this.documentService.findAll(data.kbId)
+  // }
 }

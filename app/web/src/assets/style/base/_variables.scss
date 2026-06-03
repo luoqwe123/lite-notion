@@ -1,6 +1,10 @@
 // app/web/src/assets/style/base/_variables.scss
 
 :root {
+
+  // 通用
+  --common-bg: #ffffff;
+
   // Light Theme Variables - 现代柔和白色主题
   --color-primary: #42b883;
   --color-text-default: #1f2937; // 深灰色文字，比纯黑更柔和
@@ -16,7 +20,6 @@
 
 
   /* 编辑器背景 */
-  --editor-bg: #ffffff;
   --editor-color: #333333;
 
   /* 工具栏 */
@@ -63,9 +66,25 @@
   --menu-active-text: #42b883;
   --menu-hover-bg: #eff0f0;
   --menu-border: #e2e8f0;
+
+  //  卡片
+  --card-bg: #ffffff;
+  --card-border: #e2e8f0;
+  --card-text: #1f2937;
+  --card-text-secondary: #64748b;
+  --empty-text: #94a3b8;
+  --icon-primary: #42b883;
+
+  --doc-card-bg: #ffffff;
+  --doc-border: var(--color-border-default);
+  --doc-title: var(--color-text-default);
+  --doc-desc: var(--color-text-secondary);
+  --doc-tip: #94a3b8;
 }
 
 .dark {
+  --common-bg: #1e1e1e;
+
   // Dark Theme Variables - 深色护眼主题
   --color-primary: #66cc99;
   --color-text-default: #f3f4f6; // 柔和的白色文字
@@ -82,7 +101,7 @@
 
 
   /* 编辑器背景 */
-  --editor-bg: #1e1e1e;
+
   --editor-color: #d4d4d4;
 
   /* 工具栏 */
@@ -129,6 +148,21 @@
   --menu-active-text: #42b883;
   --menu-hover-bg: #273449;
   --menu-border: #334155;
+
+
+  //  卡片
+  --card-bg: #1e293b;
+  --card-border: #334155;
+  --card-text: #e5e7eb;
+  --card-text-secondary: #94a3b8;
+  --empty-text: #64748b;
+  --icon-primary: #42b883;
+
+  --doc-card-bg: var(--color-background-card);
+  --doc-border: var(--color-border-default);
+  --doc-title: var(--color-text-default);
+  --doc-desc: var(--color-text-secondary);
+  --doc-tip: #64748b;
 }
 
 ::view-transition-new(root),

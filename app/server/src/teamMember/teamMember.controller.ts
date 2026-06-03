@@ -14,17 +14,18 @@ export class teamMemberController {
   constructor(private readonly teamMemberService: teamMemberService) {}
   @Get()
   find(@Request() req,@Query() data:findDto){
+    
     data.userId = req.user.id;
     return this.teamMemberService.find(data);
   }
-  @Delete()
+  @Delete("delete")
   @roleWeight(RoleWeight.ADMIN)
   delete(@Request() req,@Query() data:baseDto){
     data.userId = req.user.id;
     return this.teamMemberService.delete(data)
   }
   
-  @Patch()
+  @Patch("update")
   update(@Request() req,@Query() data:memberDto){
     data.userId = req.user.id;
     return this.teamMemberService.changeRole(data);

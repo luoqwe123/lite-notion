@@ -1,7 +1,7 @@
 <template>
   <div class="NavigationBar-container h-full">
     <!-- 侧边栏 -->
-    <div
+    <div   @click=""
       class="h-full flex flex-col"
       :style="{
         background: 'var(--menu-bg)',
@@ -10,8 +10,8 @@
       }"
     >
       <!-- Logo 区域 -->
-      <div class="p-4 border-b border-[var(--menu-border)]">
-        <h1 class="text-lg font-bold text-[var(--color-primary)]">我的工作台</h1>
+      <div class="p-4 border-b border-(--menu-border)">
+        <h1 class="text-lg font-bold text-(--color-primary)">{{ title || "我的工作台"}}</h1>
       </div>
 
       <!-- 菜单 -->
@@ -20,7 +20,8 @@
           :router="true"
           mode="vertical"
           class="border-0 bg-transparent"
-          default-active="start"
+          :default-active="route.path.slice(1)"
+          
         >
           <template v-for="item in routers" :key="item.path">
             <!-- 无子菜单 -->
@@ -56,7 +57,7 @@
 </template>
 
 <script setup lang='ts'>
-import { useRouter } from 'vue-router'
+import { useRoute } from "vue-router";
 
 interface RouterItem {
   path: string
@@ -69,11 +70,12 @@ interface RouterItem {
 }
 
 const props = defineProps<{
-  routers: RouterItem[]
+  routers: RouterItem[],
+  title?:string
 }>()
 
-const router = useRouter()
-
+let route = useRoute();
+// console.log(route)
 
 </script>
 

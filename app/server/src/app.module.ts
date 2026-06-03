@@ -8,12 +8,13 @@ import { workspaceModule } from './workspace/workspace.module';
 import { teamModule } from './team/team.module';
 import { documentModule } from './document/document.module';
 import { updateModule } from './update/update.module';
+import { teamMemberModule } from './teamMember/teamMember.module';
 // import { CollaborationGateway } from './collaboration/collaboration.server'
 
 @Module({
   imports: [AuthModule,PrismaModule,workspaceModule,teamModule,documentModule,ConfigModule.forRoot({
     isGlobal: true
-  }),updateModule],
+  }),updateModule,teamMemberModule],
   controllers: [AppController],
   providers: [AppService,],
 })

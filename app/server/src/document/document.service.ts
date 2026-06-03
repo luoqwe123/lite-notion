@@ -41,10 +41,11 @@ export class documentService {
           })
      }
      find(data: findDto) {
-          let { kbId, title, content, teamId } = data;
+          let { kbId, title, content } = data;
+
           return this.prisma.document.findMany({
                where: {
-                    teamId: +teamId,
+                    // teamId: +teamId,
                     kbId: +kbId,
                     ...(title && {
                          title: {
@@ -83,5 +84,18 @@ export class documentService {
           });
 
      }
+     // async findAll(kbIds: number[]) {
+     //      // 1.数据库查询符合条件数据
+     //      const list = await this.prisma.document.findMany({
+     //           where: { kbId: { in: kbIds } }
+     //      })
+     //      // 2.前端/后端js分组
+     //      const groupObj: Record<number, typeof list> = {}
+     //      list.forEach(item => {
+     //           if (!groupObj[item.teamId]) groupObj[item.teamId] = []
+     //           groupObj[item.teamId].push(item)
+     //      })
+     //      return groupObj;
+     // }
 
 }

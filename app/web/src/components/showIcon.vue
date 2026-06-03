@@ -23,6 +23,6 @@ const iconname = computed(()=> props.prefix+'-'+props.name)
 
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 
 </style >

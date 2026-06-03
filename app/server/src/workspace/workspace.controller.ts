@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Request,Delete ,Patch,Query,Param, UseGuards} from '@nestjs/common';
+import { Body, Controller, Get, Post, Request, Delete, Patch, Query, Param, UseGuards } from '@nestjs/common';
 import { workspaceService } from './workspace.service';
 import { commonDto, findDto } from './dto/common.dto';
 import { RoleWeight } from '@/common/constants';
@@ -6,7 +6,11 @@ import { roleWeight } from '@/auth/decorator/role.decorator';
 import { JwtAuthGuard } from '@/auth/guard/auth.guard';
 import { createTeamGuard } from '@/auth/guard/member.guard';
 
-@UseGuards(JwtAuthGuard,createTeamGuard("knowledgeBase",{exclude:["create"]}))
+
+interface arrayData{
+  teamId:number[]
+}
+@UseGuards(JwtAuthGuard, createTeamGuard("knowledgeBase", { exclude: ["create"] }))
 @Controller("workspace")
 export class workspaceController {
   constructor(private readonly workspaceService: workspaceService) { }
@@ -20,8 +24,8 @@ export class workspaceController {
 
   @Delete(":teamid/:id")
   @roleWeight(RoleWeight.ADMIN)
-  delete(@Request() req,@Param("id") id: string) {
-    
+  delete(@Request() req, @Param("id") id: string) {
+
     return this.workspaceService.delete(+id);
   }
   @Patch(":teamid/:id")
@@ -33,6 +37,10 @@ export class workspaceController {
   find(@Query() data: findDto) {
     return this.workspaceService.find(data)
   }
-
+  @Post("findAll")
+  findAll(@Body() data:arrayData) {
+    
+    return this.workspaceService.findAll(data.teamId)
+  }
 
 }

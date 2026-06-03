@@ -11,17 +11,23 @@ import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
-  constructor(private prisma: PrismaService, private jwt: JwtService,private config:ConfigService) { }
+  constructor(private prisma: PrismaService, private jwt: JwtService, private config: ConfigService) { }
   async passwordLogin(data: LoginDto, res: Response) {
-    const user = await this.prisma.user.findUnique({
-      where: {
-        email: data.email
+    try {
+      const user = await this.prisma.user.findUnique({
+        where: {
+          email: data.email
+        }
+      })
+
+      if (user?.password! != data.password) {
+        throw new BadRequestException('密码输入错误')
       }
-    })
-    if (user?.password! != data.password) {
-      throw new BadRequestException('密码输入错误')
+      return this.token(user!, res)
+    } catch (error) {
+      throw new BadRequestException(error)
     }
-    return this.token(user!, res)
+
   }
   async savecode(data: baseDto) {
     let { email } = data;
@@ -53,26 +59,31 @@ export class AuthService {
     }
   }
   async token(user: User, res: Response) {
-    let { email, id, avatar, nickname } = user;
-    let token = await this.jwt.signAsync({
-      email,
-      id,
+    try {
+      let { email, id, avatar, nickname } = user;
+      let token = await this.jwt.signAsync({
+        email,
+        id,
 
-    });
-    // 2. 直接写入 Cookie（核心！）
-    res.cookie('token', token, {
-      httpOnly: true, // 🔥 JS 永远拿不到，防 XSS
-      secure: process.env.NODE_ENV === 'production', // 生产环境 HTTPS
-      sameSite: 'strict', // 🔥 防 CSRF
-      maxAge: this.config.get("TOKEN_EXPIRES_IN") * 24 * 60 * 60 * 1000, // 3天过期
-      path: '/',
-    });
-    return {
-      email,
-      avatar,
-      username: nickname,
-      message: "success"
+      });
+      // 2. 直接写入 Cookie（核心！）
+      res.cookie('token', token, {
+        httpOnly: true, // 🔥 JS 永远拿不到，防 XSS
+        secure: process.env.NODE_ENV === 'production', // 生产环境 HTTPS
+        sameSite: 'strict', // 🔥 防 CSRF
+        maxAge: this.config.get("TOKEN_EXPIRES_IN") * 24 * 60 * 60 * 1000, // 3天过期
+        path: '/',
+      });
+      return {
+        email,
+        avatar,
+        username: nickname,
+        message: "success"
+      }
+    } catch (error) {
+      throw new BadRequestException(error)
     }
+
   }
   async checkCode(email: string, verifycode: string) {
     let code = await this.prisma.verifyCode.findFirst({

@@ -77,7 +77,7 @@ export function getYandProvider() {
   const provider = new WebsocketProvider('ws://localhost:3000/document', `doc-${docId}`, ydoc, {
     connect: true,
     params: {
-      teamId: "6",
+      // teamId: "6",
       docId
     }
   })

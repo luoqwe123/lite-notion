@@ -17,7 +17,7 @@
 <script setup lang='ts'>
 import { ref } from 'vue';
 import { routers } from '~/routes/router';
-
+// console.log(routers)
 let routersRef = ref<routersType[] | []>([])
 for (const el of routers) {
     if (el.path === "/") routersRef.value = el.children as routersType[];

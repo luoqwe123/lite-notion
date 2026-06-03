@@ -8,17 +8,17 @@ export class AuthController {
   constructor(private readonly AuthService: AuthService) {}
 
   @Post("login") 
-  async login(@Body() data:LoginDto,@Res() res) {
+  async login(@Body() data:LoginDto,@Res({ passthrough: true }) res,) {
     
     if(data.type === "password") {
-      return await this.AuthService.passwordLogin(data,res);
+      return  this.AuthService.passwordLogin(data,res);
     }else{
-      return await this.AuthService.codeLogin(data,res)
+      return  this.AuthService.codeLogin(data,res)
     }
    
   }
   @Post("register") 
-  async register(@Body() data:registerDto,@Res() res) {
+  async register(@Body() data:registerDto,@Res({ passthrough: true }) res) {
     return this.AuthService.register(data,res);
   }
   @Post("gencode") 

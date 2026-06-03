@@ -11,20 +11,18 @@
     <div class="from flex flex-col items-center gap-2 w-80">
       <el-form class="w-full" ref="ruleFormRef" :model="ruleForm" status-icon :rules="rules">
         <el-form-item class="h-12 w-full" prop="email">
-          <el-input placeholder="请输入您的邮箱"
-            class="h-12! w-full! rounded-lg!  transition-all" type="email"
+          <el-input placeholder="请输入您的邮箱" class="h-12! w-full! rounded-lg!  transition-all" type="email"
             v-model="ruleForm.email" />
         </el-form-item>
 
         <el-form-item class="h-12 w-full" v-show="showKeyinput" prop="pass">
-          <el-input placeholder="请输入密码"
-            class="h-12! w-full! rounded-lg!  transition-all" type="password"
+          <el-input placeholder="请输入密码" class="h-12! w-full! rounded-lg!  transition-all" type="password"
             v-model="ruleForm.pass" autocomplete="off" />
         </el-form-item>
         <el-form-item class="h-12 w-full" v-show="showCaptcha">
           <div class="captcha flex justify-between w-full">
-            <el-input placeholder="请输入验证码" v-model="ruleForm.checkcode"
-              class="h-12! w-56! rounded-lg!  transition-all" show-password />
+            <el-input placeholder="请输入验证码" v-model="ruleForm.checkcode" class="h-12! w-56! rounded-lg!  transition-all"
+              show-password />
             <el-button class="w-20 h-12!">获取验证码</el-button>
           </div>
         </el-form-item>
@@ -69,7 +67,8 @@
 import { computed, reactive, Ref, ref, useTemplateRef } from 'vue';
 import { loginStore } from '~/stores';
 import type { FormInstance, FormRules } from 'element-plus';
-
+import { userStore } from '~/stores/modules/user';
+const useUserStore = userStore()
 const props = withDefaults(defineProps<{
   checkRule?: {
     email: {
@@ -98,11 +97,11 @@ const props = withDefaults(defineProps<{
       pass: {
         minlength: 6,
         maxlength: 16,
-        pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,16}$/,
-        message: {
+        // pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,16}$/,
+        // message: {
 
-          pattern: '密码必须包含字母和数字'
-        }
+        //   pattern: '密码必须包含字母和数字'
+        // }
       }
     }
   }
@@ -127,15 +126,15 @@ function validatePass(rules: any, value: any, callback: any) {
   if (value === "") {
     callback(new Error("密码不能为空！"))
   }
-  if (value.length <= pass.minlength) {
+  if (value.length < pass.minlength) {
     callback(new Error(`密码长度不能小于${pass.minlength}`))
   }
-  if (value.length <= pass.maxlength) {
+  if (value.length >= pass.maxlength) {
     callback(new Error(`密码长度不能大于${pass.maxlength}`))
   }
-  if (!pass.pattern?.test(value)) {
-    callback(new Error(`${pass.message?.pattern}`))
-  }
+  // if (!pass.pattern?.test(value)) {
+  //   callback(new Error(`${pass.message?.pattern}`))
+  // }
   callback();
 }
 function validateEmail(rules: any, value: any, callback: any) {
@@ -151,14 +150,15 @@ function validateEmail(rules: any, value: any, callback: any) {
 }
 import { request } from '~/utils/request';
 async function submit() {
-  const formEl = ruleFormRef.value
-  let res = await request.post("/login", {
-    body: {
-      email: 12312,
-      password: 1232132
-    }
-  })
-  console.log(res)
+  const formEl = ruleFormRef.value;
+  let data = {
+    email: ruleForm.email,
+    password: ruleForm.pass,
+    type: usekeyLogin.value ? "password" : "code"
+  }
+  
+  let res = await useUserStore.userLogin(data)
+
   // formEl?.validate( (valid)=>{
   //   console.log(valid)
   //   if(valid){

@@ -9,8 +9,17 @@ import { Role } from '@/common/constants';
 export class teamMemberService {
     constructor(private prisma: PrismaService,) { }
     find(data: findDto) {
+
         return this.prisma.teamMember.findMany({
-            where: idToNum({ ...data })
+            where: idToNum({ ...data }),
+            include: {
+                team: {
+                    select: {
+                        name: true,
+                        description: true,
+                    },
+                },
+            },
         })
     }
     delete(data: baseDto) {

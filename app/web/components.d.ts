@@ -11,9 +11,13 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AddTeam: typeof import('./src/components/AddTeam/index.vue')['default']
     Btn: typeof import('./src/components/btn.vue')['default']
     CodeBlockNodeView: typeof import('./src/components/Tiptap/CodeBlockNodeView.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
+    ElDropdown: typeof import('element-plus/es')['ElDropdown']
+    ElDropdownItem: typeof import('element-plus/es')['ElDropdownItem']
+    ElDropdownMenu: typeof import('element-plus/es')['ElDropdownMenu']
     ElForm: typeof import('element-plus/es')['ElForm']
     ElFormItem: typeof import('element-plus/es')['ElFormItem']
     ElFromItem: typeof import('element-plus/es')['ElFromItem']

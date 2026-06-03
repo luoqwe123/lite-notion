@@ -9,11 +9,14 @@ import { Request } from "express";
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     constructor(configServicec: ConfigService) {
-
+       
         super({
             //解析用户提交的Bearer Token header数据 从 cookie 取 token（支持 HTTP + WS）
             jwtFromRequest: ExtractJwt.fromExtractors([
-                (req: Request) => req.cookies?.token, // 优先 cookie（httpOnly）
+                (req: Request) => {
+                    
+                   return req.cookies?.token
+                }, // 优先 cookie（httpOnly）
                 ExtractJwt.fromAuthHeaderAsBearerToken(), // 兼容 header
             ]),
             //加密的 密钥

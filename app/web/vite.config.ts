@@ -38,11 +38,14 @@ export default defineConfig({
             // 在这里列出你的核心依赖，让 vite 提前预构建
         ],
         exclude: [], // 排除不需要预构建的依赖
+        esbuildOptions: {
+            sourcemap: true,
+        },
     },
 
     // 2. 限制 Vite 的文件扫描范围（关键！）
-    server: { 
-       
+    server: {
+
         watch: {
             ignored: [
                 '**/node_modules/**',
@@ -53,5 +56,9 @@ export default defineConfig({
                 '**/node_modules/.vite/**',
             ],
         },
+
+
+
     },
+
 })

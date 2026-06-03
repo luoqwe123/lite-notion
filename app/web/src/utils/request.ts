@@ -7,7 +7,7 @@ enum ContentType {
 
 // TS 类型定义
 interface GetOptions {
-  params?: Record<string, string | number | undefined>; // 自动拼接参数
+  params?: Record<string, string | number | undefined|number[]>; // 自动拼接参数
 }
 
 interface RequestOptions {
@@ -23,7 +23,7 @@ class Ofetch {
   }
 
   // ==================== GET ====================
-  async get<T,V>(url: string, options: GetOptions = {}) :Promise<T|V> {
+  async get<T, V>(url: string, options: GetOptions = {}): Promise<T | V> {
     const { params } = options;
     let fullUrl = this.baseUrl + url;
 
@@ -38,24 +38,26 @@ class Ofetch {
 
     const res = await fetch(fullUrl, {
       method: "GET",
-      //credentials: "include", // 👈 必须！自动带cookie
+      credentials: "include", // 👈 必须！自动带cookie
     });
 
     return this.handleResponse(res);
   }
 
   // ==================== POST ====================
-  async post<T,V>(url: string, options: RequestOptions = {}):Promise<T|V> {
+  async post<T, V>(url: string, options: RequestOptions = {}): Promise<T | V> {
+  
     return this.request("POST", url, options);
   }
 
   // ==================== DELETE ====================
-  async delete<T,V>(url: string, options: RequestOptions = {}):Promise<T|V> {
+  async delete<T, V>(url: string, options: RequestOptions = {}): Promise<T | V> {
     return this.request("DELETE", url, options);
   }
 
   // ==================== PATCH ====================
-  async patch<T,V>(url: string, options: RequestOptions = {}):Promise<T|V> {
+  async patch<T, V>(url: string, options: RequestOptions = {}): Promise<T | V> {
+    
     return this.request("PATCH", url, options);
   }
 
@@ -78,10 +80,10 @@ class Ofetch {
     } else if (htype === "formData") {
       finalBody = new FormData();
       Object.entries(body || {}).forEach(([k, v]) => {
-       
+
         finalBody.append(k, v);
       });
-     
+
       contentType = null; // 👈 formData 浏览器自动生成，不能手动写 Content-Type
     }
 
@@ -89,13 +91,13 @@ class Ofetch {
     if (contentType) {
       headers["Content-Type"] = contentType;
     }
+   
     const res = await fetch(this.baseUrl + url, {
       method,
       headers,
       body: finalBody,
-     // credentials: "include", // 👈 核心！带cookie
+      credentials: "include", // 👈 核心！带cookie
     });
-
     return this.handleResponse(res);
   }
 
@@ -107,11 +109,11 @@ class Ofetch {
         throw new Error(data.message || "请求失败");
       }
       return data;
-    } catch (err:any) {
+    } catch (err: any) {
       console.error("fetch 错误 →", err.message);
       throw err;
     }
   }
 }
 
-export const  request = new Ofetch(import.meta.env.VITE_BASEURL);
+export const request = new Ofetch(import.meta.env.VITE_BASEURL);
