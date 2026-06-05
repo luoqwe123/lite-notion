@@ -37,9 +37,10 @@
               v-else
               :index="item.path"
               v-show="item.meta?.isNav"
+              @click="goRouter(item.path)"
             >
               <template #title>
-                <span class="ml-2">{{ item.meta?.name }}</span>
+                <span class="ml-2">{{ item.meta?.name }} </span>
               </template>
               <el-menu-item
                 v-for="child in item.children"
@@ -57,7 +58,7 @@
 </template>
 
 <script setup lang='ts'>
-import { useRoute } from "vue-router";
+import { useRouter ,useRoute} from "vue-router";
 
 interface RouterItem {
   path: string
@@ -74,7 +75,13 @@ const props = defineProps<{
   title?:string
 }>()
 
-let route = useRoute();
+let router = useRouter();
+const route = useRoute()
+function goRouter (path:string){
+  router.push({
+    path
+  })
+}
 // console.log(route)
 
 </script>

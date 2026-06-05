@@ -15,8 +15,10 @@ export const userStore = defineStore("userStore", {
         async userLogin(data: loginDataType) {
             try {
                 let res = await login(data);
+                
                 this.email = res.data.email;
                 this.username = res.data.username
+                return res
                
             } catch (error) {
                 console.log(error)

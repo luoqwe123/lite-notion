@@ -3,7 +3,6 @@
 import { routes } from "./index";
 import { workSpaceStore } from "~/stores/modules/workSpaceStore";
 import { teamsStroe } from "~/stores/modules/teams";
-import { useEditorStore } from "~/stores/modules/editor";
 import { routers } from "./router";
 
 let hasSpaceData = false;
@@ -26,9 +25,7 @@ routes.beforeEach(async (to, from, next) => {
         }
 
     }
-    if(to.name === "workSpace/item"){
-
-    }
+    
 
 
     next()

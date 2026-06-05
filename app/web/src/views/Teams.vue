@@ -52,6 +52,7 @@
       <!-- 知识库卡片网格（响应式） -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <div v-for="space in group.workSpace" :key="space.name"
+          @click="goDocs(space)"
           class="p-4 rounded-lg border transition-all hover:shadow-md cursor-pointer" :style="{
             background: 'var(--card-bg)',
             borderColor: 'var(--card-border)',
@@ -97,11 +98,11 @@
 <script setup lang='ts'>
 import { workSpaceStore } from "~/stores/modules/workSpaceStore";
 import { teamsStroe } from "~/stores/modules/teams";
+import { useRouter } from "vue-router";
+const router = useRouter()
 const useworkSpaceStore = workSpaceStore()
 const useTeamsStroe = teamsStroe()
 
-console.log(useworkSpaceStore.dataList)
-console.log(useTeamsStroe.data)
 
 interface WorkSpaceItem {
   id: number
@@ -146,6 +147,12 @@ function mergeData(teamData: teamsDataType, spaceData: spaceDataType) {
   return res;
 }
 let dataList :any = mergeData(useTeamsStroe.data,useworkSpaceStore.dataList)
+
+function goDocs(space:WorkSpaceItem){
+  router.push({
+    path:`workSpace/item/${space.id}`
+  })
+}
 
 // 示例数据（和截图一致，可直接替换）
 // let dataList: GroupItem[] = [

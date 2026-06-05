@@ -66,8 +66,11 @@
 
 import { computed, reactive, Ref, ref, useTemplateRef } from 'vue';
 import { loginStore } from '~/stores';
-import type { FormInstance, FormRules } from 'element-plus';
+import {  type FormInstance, type FormRules } from 'element-plus';
 import { userStore } from '~/stores/modules/user';
+import { useRouter } from 'vue-router';
+const router = useRouter()
+
 const useUserStore = userStore()
 const props = withDefaults(defineProps<{
   checkRule?: {
@@ -148,7 +151,7 @@ function validateEmail(rules: any, value: any, callback: any) {
   }
   callback();
 }
-import { request } from '~/utils/request';
+// import { request } from '~/utils/request';
 async function submit() {
   const formEl = ruleFormRef.value;
   let data = {
@@ -157,8 +160,20 @@ async function submit() {
     type: usekeyLogin.value ? "password" : "code"
   }
   
-  let res = await useUserStore.userLogin(data)
+  let res:any = await useUserStore.userLogin(data)
 
+  if(res.code == "200"){
+    ElMessage({
+      type:"success",
+      message:"登录成功"
+    })
+    router.push({
+      path:"/"
+    })
+  }else{
+     ElMessage.error('账号密码错误')
+    
+  }
   // formEl?.validate( (valid)=>{
   //   console.log(valid)
   //   if(valid){

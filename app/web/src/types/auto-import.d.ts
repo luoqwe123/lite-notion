@@ -7,5 +7,4 @@
 export {}
 declare global {
   const ElMessage: typeof import('element-plus/es').ElMessage
-  const ElMessageerror: typeof import('element-plus/es').ElMessageerror
 }

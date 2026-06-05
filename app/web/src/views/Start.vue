@@ -1,10 +1,15 @@
 <template>
     <div class="Start-container">
         这是首页
+      
+      
     </div>
 </template>
 
 <script setup lang='ts'>
+
+
+
 
 </script>
 
