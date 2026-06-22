@@ -3,7 +3,7 @@ import { useEditor } from '@tiptap/vue-3'
 import { getExtensions, getYandProvider } from './useExtensions'
 import { Collaboration } from '@tiptap/extension-collaboration'
 import CollaborationCaret from '@tiptap/extension-collaboration-caret'
-
+import { useColorHash } from '~/composables/useHashColor'
 import { useEditorStore } from '~/stores/modules/editor'
 
 let editorStore = useEditorStore();
@@ -14,7 +14,8 @@ interface UseTiptapEditorOptions {
 
 export function useTiptapEditor() {
   // const { initialContent = "", } = options!;
-  const { ydoc, provider, loadYjsDocument } = getYandProvider();
+  const docId = editorStore.id;
+  const { ydoc, provider, loadYjsDocument } = getYandProvider(docId);
 
 
   const editor = useEditor({
@@ -27,33 +28,9 @@ export function useTiptapEditor() {
         provider,
         user: {
           name: '用户' + Math.random().toString(36).slice(2, 6),
-          color: '#' + Math.floor(Math.random() * 16777215).toString(16),
+          color: useColorHash().hex(docId),
         },
-        // 2. 🔥 自定义光标+标签（完全自由DOM）
-  //       render: (user) => {
-  //         // 外层容器：用来定位气泡
-  //         const container = document.createElement('div')
-  //         container.className = 'custom-caret-container'
-
-  //         // 1. 光标（保留一根竖线，方便用户看到光标位置）
-  //         const caret = document.createElement('div')
-  //         caret.className = 'custom-caret'
-  //         caret.style.borderColor = user.color
-
-  //         // 2. 气泡提示
-  //         const bubble = document.createElement('div')
-  //         bubble.className = 'custom-caret-bubble'
-  //         bubble.style.backgroundColor = user.color
-  //         bubble.innerHTML = `
-  //   <span>${user.name} 正在编辑</span>
-  // `
-  //         console.log(caret)
-  //         // 组装结构
-  //         container.appendChild(bubble)
-  //         container.appendChild(caret)
-
-  //         return container
-  //       },
+       
       }),
     ],
     // content: initialContent,

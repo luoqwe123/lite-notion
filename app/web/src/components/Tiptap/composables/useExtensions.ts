@@ -12,13 +12,14 @@ import javascript from 'highlight.js/lib/languages/javascript'
 import typescript from 'highlight.js/lib/languages/typescript'
 import css from 'highlight.js/lib/languages/css'
 import xml from 'highlight.js/lib/languages/xml'
-import json from 'highlight.js/lib/languages/json'
+import json from 'highlight.js/lib/languages/json';
+import { IndexeddbPersistence } from 'y-indexeddb'
 
 import { WebsocketProvider } from "y-websocket"
 import * as Y from 'yjs'
 
 import { toUint8Array } from 'js-base64'
-import { useEditorStore } from "~/stores/modules/editor"
+
 
 
 // import { CollaborationCursor } from '@tiptap/extension-collaboration-cursor'
@@ -27,7 +28,7 @@ import CodeBlockNodeView from '../CodeBlockNodeView.vue'
 import { reactive } from 'vue'
 
 
-const editorStore = useEditorStore()
+
 
 // 创建 lowlight 实例
 export const lowlight = createLowlight()
@@ -65,15 +66,17 @@ export const CustomCodeBlock = CodeBlockLowlight.extend({
 // provider.wsconnected === true（WebSocket 握手完成）
 // provider.synced === true（和服务端同步完成）
 
-export function getYandProvider() {
+export function getYandProvider(docId: string) {
   const ydoc = new Y.Doc()
 
   function loadYjsDocument(data: string) {
-    if(data.length) Y.applyUpdate(ydoc, toUint8Array(data))
+    if (data.length) Y.applyUpdate(ydoc, toUint8Array(data))
   }
-
-  // 2. 连接后端 websocket
-  const docId = editorStore.id;
+  const roomName = 'abc'
+  const persistence = new IndexeddbPersistence(roomName, ydoc)
+  persistence.once('synced', () => { console.log('initial content loaded') })
+  // 2. 连接后端 websocket  
+  // y-websocket 源码写死了心跳保活时间 30s
   const provider = new WebsocketProvider('ws://localhost:3000/document', `doc-${docId}`, ydoc, {
     connect: true,
     params: {
@@ -88,7 +91,7 @@ export function getYandProvider() {
   //   console.log(provider)
   // })
 
- 
+
 
 
   return {
@@ -141,7 +144,7 @@ export const getExtensions = () => {
       defaultLanguage: 'javascript',
       languageClassPrefix: 'language-',
     }),
-   
+
 
   ]
 
