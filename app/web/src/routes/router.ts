@@ -47,8 +47,8 @@ export const routers = [
     },
 
     {
-        path: "/workSpace/item/:id",
-        name: "spaceData",
+        path: "/workSpace/item/:itemId",
+       
 
         component: () => import("~/views/workSpace.vue"),
         meta: {
@@ -62,7 +62,8 @@ export const routers = [
                 redirect: (to: any) => {
                     // 携带父路由params.id，用name跳转子路由
                     return { name: "spaceIntro", params: to.params }
-                }
+                },
+                name: "spaceData",
             },
             {
                 name: "spaceIntro",
@@ -75,7 +76,7 @@ export const routers = [
             },
             {
                 name: "doc",
-                path: "document/:id",
+                path: "document/:docId",
                 component: () => import("~/views/Document.vue"),
                 meta: {
                     isNav: false,
@@ -85,5 +86,9 @@ export const routers = [
         ]
     },
 
-
+    {
+        name:"test",
+        path: "/test",
+        component:()=> import("~/views/Testfield/index.vue")        
+    }
 ]

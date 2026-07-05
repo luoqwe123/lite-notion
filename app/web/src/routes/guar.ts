@@ -6,7 +6,7 @@ import { teamsStroe } from "~/stores/modules/teams";
 import { routers } from "./router";
 
 let hasSpaceData = false;
-routes.beforeEach(async (to, from, next) => {
+routes.beforeEach(async (to, from) => {
 
     if (to.name === "workSpace") {
         if (!hasSpaceData) {
@@ -28,7 +28,7 @@ routes.beforeEach(async (to, from, next) => {
     
 
 
-    next()
+    return true
 })
 function spaceRoutes(dataList: any) {
    
