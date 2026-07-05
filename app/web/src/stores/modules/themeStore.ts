@@ -38,7 +38,7 @@ export const useThemeStore = defineStore('theme', {
           },
           {
             duration: 500,
-            pseudoElement: isDark
+            pseudoElement: isDark    // 包含伪元素选择器（如 。如果存在，该效应会应用到所选的伪元素上，而不是施加在自身。
               ? '::view-transition-old(root)'
               : '::view-transition-new(root)'
           }

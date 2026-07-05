@@ -151,36 +151,82 @@ function validateEmail(rules: any, value: any, callback: any) {
   }
   callback();
 }
-// import { request } from '~/utils/request';
 async function submit() {
   const formEl = ruleFormRef.value;
-  let data = {
-    email: ruleForm.email,
-    password: ruleForm.pass,
-    type: usekeyLogin.value ? "password" : "code"
+  
+  // 表单验证
+  if (!formEl) {
+    ElMessage.error('表单元素未找到');
+    return;
   }
   
-  let res:any = await useUserStore.userLogin(data)
-
-  if(res.code == "200"){
-    ElMessage({
-      type:"success",
-      message:"登录成功"
-    })
-    router.push({
-      path:"/"
-    })
-  }else{
-     ElMessage.error('账号密码错误')
+  try {
+    // 执行表单验证
+    await formEl.validate();
     
+    let data = {
+      email: ruleForm.email,
+      password: ruleForm.pass,
+      type: usekeyLogin.value ? "password" : "code"
+    }
+    
+    // 参数验证
+    if (!data.email || !data.password) {
+      ElMessage.error('请填写完整的登录信息');
+      return;
+    }
+    
+    // 显示加载状态
+    const loadingMessage = ElMessage({
+      type: 'info',
+      message: '登录中...',
+      duration: 0
+    });
+    
+    let res = await useUserStore.userLogin(data);
+    
+    // 关闭加载消息
+    loadingMessage.close();
+    
+    if (res.code === "200" || res.code === 200) {
+      ElMessage({
+        type: "success",
+        message: "登录成功"
+      })
+      router.push({
+        path: "/"
+      })
+    } else {
+      // 显示具体的错误信息
+      let errorMessage = '账号密码错误';
+      if (res.message) {
+        errorMessage = res.message;
+      }
+      
+      ElMessage.error(errorMessage);
+    }
+  } catch (error: any) {
+    console.error('登录失败:', error);
+    
+    // 关闭可能存在的加载消息
+    const loadingMessages = document.querySelectorAll('.el-message');
+    loadingMessages.forEach(msg => {
+      if (msg.textContent?.includes('登录中')) {
+        msg.remove();
+      }
+    });
+    
+    // 显示用户友好的错误信息
+    let errorMessage = '登录失败，请重试';
+    if (error.message) {
+      errorMessage = error.message;
+      if (error.code === "NETWORK_ERROR") {
+        errorMessage = '网络连接失败，请检查网络后重试';
+      }
+    }
+    
+    ElMessage.error(errorMessage);
   }
-  // formEl?.validate( (valid)=>{
-  //   console.log(valid)
-  //   if(valid){
-
-  //     formEl.resetFields()
-  //   }
-  // })
 }
 
 const isRegister = computed(() => {

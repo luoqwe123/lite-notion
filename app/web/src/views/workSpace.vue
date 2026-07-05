@@ -34,7 +34,7 @@ interface routeType  {
 }
 
 async function getRoutes() {
-    let id = route.params.id
+    let id = route.params.itemId
     let { data } = await editorStore.getAllDoc(id as string)
     let res:routeType[] = [];
     for (const el of data) {

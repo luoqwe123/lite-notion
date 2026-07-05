@@ -20,19 +20,21 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref, useTemplateRef, watch, } from 'vue'
+// /workSpace/item/1/document/1
+import {  onBeforeUnmount, onMounted, ref, useTemplateRef, watch, } from 'vue'
 import { EditorContent, } from '@tiptap/vue-3'
 import Toolbal from "./Toolbar/index.vue"
-import browserImageCompression from 'browser-image-compression'
+
 import { useTiptapEditor } from './composables/useTiptapEditor'
 import { useEditorStore } from '~/stores/modules/editor'
 import { ElMessage } from 'element-plus'
 import { storeToRefs } from 'pinia'
-import * as Y from 'yjs';
+
 import { fromUint8Array } from 'js-base64'
 import { uploadImg } from '~/api/update/index.js'
 import { getImageSize } from '~/utils/getImgSize.js'
 import { EditorList } from '../ShowEditor/index.js'
+import * as Y from 'yjs'
 
 let editorStore = useEditorStore()
 let { id, editorState } = storeToRefs(editorStore);
@@ -67,56 +69,117 @@ const IMG_CONFIG = {
 
 // 上传逻辑：本地预览 → 上传 → 替换URL
 const uploadImage = async (file: File) => {
+  let tempUrl: string | null = null;
+  
   try {
-    if (!IMG_CONFIG.allowTypes.includes(file.type)) return alert('仅支持 jpg/png/gif/webp')
-    if (file.size / 1024 / 1024 > IMG_CONFIG.maxSizeMB) return alert(`最大 ${IMG_CONFIG.maxSizeMB}MB`)
+    const browserImageCompression = ( await import("browser-image-compression")).default; 
+    
+    // 参数验证
+    if (!file || !(file instanceof File)) {
+      throw new Error('文件参数无效');
+    }
+    
+    // 检查文件类型
+    if (!IMG_CONFIG.allowTypes.includes(file.type)) {
+      ElMessage.error('仅支持 jpg/png/gif/webp 格式的图片');
+      return;
+    }
+    
+    // 检查文件大小
+    if (file.size / 1024 / 1024 > IMG_CONFIG.maxSizeMB) {
+      ElMessage.error(`图片大小不能超过 ${IMG_CONFIG.maxSizeMB}MB`);
+      return;
+    }
 
-    const compressed = await browserImageCompression(file, IMG_CONFIG.compress)
-    const tempUrl = URL.createObjectURL(compressed);
-    const { width: naturalWidth, height: naturalHeight } = await getImageSize(tempUrl)
+    // 压缩图片
+    const compressed = await browserImageCompression(file, IMG_CONFIG.compress);
+    tempUrl = URL.createObjectURL(compressed);
+    
+    // 获取图片尺寸
+    const { width: naturalWidth, height: naturalHeight } = await getImageSize(tempUrl);
 
-    // 你可以限制最大宽度，保持比例
-    const displayWidth = Math.min(naturalWidth, 800)
+    // 计算显示宽度
+    const displayWidth = Math.min(naturalWidth, 800);
 
     // 插入本地预览
     editor.value?.chain().focus().setImage({
-      src: tempUrl, width: displayWidth, // 用计算后的宽度
+      src: tempUrl,
+      width: displayWidth,
       height: naturalHeight * (displayWidth / naturalWidth),
-    }).run()
-    let res = await uploadImg(compressed);
+    }).run();
 
-    // // 替换真实地址
+    // 上传图片
+    let res;
+    try {
+      res = await uploadImg(compressed);
+    } catch (uploadError: any) {
+      console.error('图片上传失败:', uploadError);
+      
+      // 显示具体的错误信息
+      let errorMessage = "图片上传失败";
+      if (uploadError.message) {
+        errorMessage = uploadError.message;
+      } else if (uploadError.code === "NETWORK_ERROR") {
+        errorMessage = "网络连接失败，请检查网络后重试";
+      }
+      
+      ElMessage.error(errorMessage);
+      throw new Error(errorMessage);
+    }
+
+    // 检查上传响应
+    if (!res || !res.data || !res.data.url) {
+      throw new Error('服务器返回数据格式错误');
+    }
+
+    // 替换为真实地址
     editor.value?.chain().focus().updateAttributes('image', {
-      width: displayWidth, // 用计算后的宽度
+      width: displayWidth,
       height: naturalHeight * (displayWidth / naturalWidth),
       src: res.data.url
-    }).run()
-    URL.revokeObjectURL(tempUrl)
-  } catch (err) {
-    console.log(err)
-    ElMessage.error("上传失败")
+    }).run();
 
+    ElMessage({
+      type: 'success',
+      message: '图片上传成功'
+    });
+
+  } catch (err: any) {
+    console.error('图片处理失败:', err);
+    
+    // 显示用户友好的错误信息
+    let errorMessage = "图片处理失败";
+    if (err.message) {
+      errorMessage = err.message;
+    }
+    
+    ElMessage.error(errorMessage);
+    
+    // 如果上传失败，移除预览的图片
+    if (editor.value) {
+      // 简单的回退方案：撤销最后一个操作
+      editor.value.chain().focus().undo().run();
+    }
+    
+  } finally {
+    // 清理临时URL
+    if (tempUrl) {
+      URL.revokeObjectURL(tempUrl);
+    }
   }
 }
 
-// watch(editorState, (val) => {
-//   console.log(val)
-//   if (val) {
 
-//   }
-// },{
-//   immediate:true
-// })
 
 const { editor, ydoc, loadYjsDocument, provider } = useTiptapEditor()
 
-// console.log(editor)
+console.log(editor)
 // editor 初始化成功将内容添加到编辑器中
 watch(editor, async () => {
   // console.log(val)
-  let data = await editorStore.findOne(id.value);
-  curDocContent.value = data.data.content;
-  loadYjsDocument(curDocContent.value!)
+  // let data = await editorStore.findOne(id.value);
+  // curDocContent.value = data.data.content;
+  // loadYjsDocument(curDocContent.value!)
   let saveTimer: number | null = null
 
   // Y.Doc 每次变更触发
@@ -135,7 +198,8 @@ watch(editor, async () => {
 
       // 调用后端保存接口
       let res = await editorStore.saveDoc(data)
-    }, 2000)
+      saveTimer = null
+    }, 1000)
   })
 
 }, {

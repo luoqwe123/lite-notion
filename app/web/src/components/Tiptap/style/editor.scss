@@ -1,4 +1,7 @@
-  :deep(.ProseMirror) {
+
+//:deep(.ProseMirror) 是 Vue scoped style 的深层作用域穿透选择器 ,作用就是打破组件作用域隔离，仅当前组件内部后代生效，不会穿透到页面其他无关组件。
+
+:deep(.ProseMirror) {
     outline: none;
     min-height: 260px;
 

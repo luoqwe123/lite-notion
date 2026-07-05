@@ -15,8 +15,9 @@ import "~/routes/guar"
 import 'virtual:svg-icons-register';
 import { useThemeStore } from './stores/modules/themeStore'; // Import theme store
 
+
 const app = createApp(App);
-app.use(createApp);
+
 const pinia = createPinia(); // Create pinia instance
 app.use(pinia); // Use the created pinia instance
 // Initialize theme

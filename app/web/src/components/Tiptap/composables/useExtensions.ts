@@ -25,7 +25,7 @@ import { toUint8Array } from 'js-base64'
 // import { CollaborationCursor } from '@tiptap/extension-collaboration-cursor'
 // 导入 NodeView 组件
 import CodeBlockNodeView from '../CodeBlockNodeView.vue'
-import { reactive } from 'vue'
+
 
 
 
