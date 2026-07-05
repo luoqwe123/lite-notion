@@ -35,8 +35,8 @@ export const teamMemberStore = defineStore("teamMemberStore", {
           return this.teamMembers;
         } else {
           this.error = res.message || "获取团队成员列表失败";
-          ElMessage.error(this.error);
-          throw new Error(this.error);
+          ElMessage.error(this.error!);
+          throw new Error(this.error!);
         }
       } catch (error: any) {
         console.error('获取团队成员列表失败:', error);
@@ -81,8 +81,8 @@ export const teamMemberStore = defineStore("teamMemberStore", {
           return res.data;
         } else {
           this.error = res.message || "添加成员失败";
-          ElMessage.error(this.error);
-          throw new Error(this.error);
+          ElMessage.error(this.error!);
+          throw new Error(this.error!);
         }
       } catch (error: any) {
         console.error('添加成员失败:', error);
@@ -126,8 +126,8 @@ export const teamMemberStore = defineStore("teamMemberStore", {
           return res.data;
         } else {
           this.error = res.message || "更新成员角色失败";
-          ElMessage.error(this.error);
-          throw new Error(this.error);
+          ElMessage.error(this.error!);
+          throw new Error(this.error!);
         }
       } catch (error: any) {
         console.error('更新成员角色失败:', error);
@@ -171,8 +171,8 @@ export const teamMemberStore = defineStore("teamMemberStore", {
           return res;
         } else {
           this.error = res.message || "删除成员失败";
-          ElMessage.error(this.error);
-          throw new Error(this.error);
+          ElMessage.error(this.error!);
+          throw new Error(this.error!);
         }
       } catch (error: any) {
         console.error('删除成员失败:', error);
@@ -201,7 +201,7 @@ export const teamMemberStore = defineStore("teamMemberStore", {
     },
     
     // 添加单个成员
-    addMember(member: TeamMember) {
+    pushMember(member: TeamMember) {
       this.teamMembers.push(member);
     },
     

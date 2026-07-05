@@ -27,8 +27,8 @@ export const teamsStroe = defineStore("teamsStroe",{
                     return this.data;
                 } else {
                     this.error = res.message || "获取团队列表失败";
-                    ElMessage.error(this.error);
-                    throw new Error(this.error);
+                    ElMessage.error(this.error!);
+                    throw new Error(this.error!);
                 }
             } catch (error: any) {
                 console.error('获取团队列表失败:', error);

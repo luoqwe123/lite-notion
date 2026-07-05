@@ -33,8 +33,8 @@ export const teamStore = defineStore("teamStore", {
           return this.teams;
         } else {
           this.error = res.message || "获取团队列表失败";
-          ElMessage.error(this.error);
-          throw new Error(this.error);
+          ElMessage.error(this.error!);
+          throw new Error(this.error!);
         }
       } catch (error: any) {
         console.error('获取团队列表失败:', error);
@@ -79,8 +79,8 @@ export const teamStore = defineStore("teamStore", {
           return res.data;
         } else {
           this.error = res.message || "创建团队失败";
-          ElMessage.error(this.error);
-          throw new Error(this.error);
+          ElMessage.error(this.error!);
+          throw new Error(this.error!);
         }
       } catch (error: any) {
         console.error('创建团队失败:', error);
@@ -126,8 +126,8 @@ export const teamStore = defineStore("teamStore", {
           return res;
         } else {
           this.error = res.message || "删除团队失败";
-          ElMessage.error(this.error);
-          throw new Error(this.error);
+          ElMessage.error(this.error!);
+          throw new Error(this.error!);
         }
       } catch (error: any) {
         console.error('删除团队失败:', error);
@@ -176,8 +176,8 @@ export const teamStore = defineStore("teamStore", {
           return res.data;
         } else {
           this.error = res.message || "更新团队失败";
-          ElMessage.error(this.error);
-          throw new Error(this.error);
+          ElMessage.error(this.error!);
+          throw new Error(this.error!);
         }
       } catch (error: any) {
         console.error('更新团队失败:', error);
