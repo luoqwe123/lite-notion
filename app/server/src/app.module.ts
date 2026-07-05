@@ -12,9 +12,18 @@ import { teamMemberModule } from './teamMember/teamMember.module';
 // import { CollaborationGateway } from './collaboration/collaboration.server'
 
 @Module({
-  imports: [AuthModule,PrismaModule,workspaceModule,teamModule,documentModule,ConfigModule.forRoot({
-    isGlobal: true
-  }),updateModule,teamMemberModule],
+  imports: [
+    AuthModule,
+    PrismaModule,
+    workspaceModule,
+    teamModule,
+    documentModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    updateModule,
+    teamMemberModule,
+  ],
   controllers: [AppController],
   providers: [AppService,],
 })

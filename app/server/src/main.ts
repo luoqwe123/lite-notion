@@ -8,11 +8,13 @@ import cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.use(cookieParser())
+  app.use(cookieParser());
   app.useWebSocketAdapter(new WsAdapter(app)) // 支持 ws
-  app.useGlobalPipes(new Validate({
-    skipMissingProperties: true,
-  }));
+  app.useGlobalPipes(
+    new Validate({
+      skipMissingProperties: true,
+    }),
+  );
   app.useGlobalInterceptors(new ResponseInterceptor())
   app.setGlobalPrefix('api');
   app.enableCors({
