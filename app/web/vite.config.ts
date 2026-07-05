@@ -7,6 +7,7 @@ import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
 import { createSvgIconsPlugin } from "vite-plugin-svg-icons";
 import { visualizer } from "rollup-plugin-visualizer"
+import { compression } from 'vite-plugin-compression2'
 
 export default defineConfig({
     plugins: [
@@ -29,6 +30,11 @@ export default defineConfig({
             gzipSize: true,
             brotliSize: true,
 
+        }),
+        compression({
+            algorithms: ['gzip', 'brotliCompress'], //brotli比gzip更小15~20%
+            threshold: 1024, //大于1kb才压缩
+            deleteOriginalAssets: false //保留原文件
         })
     ],
 
@@ -38,18 +44,20 @@ export default defineConfig({
             "~assets": path.resolve(__dirname, "./src/assets")
         }
     },
-    // 1. 优化依赖预构建（强制预构建，避免动态导入扫描）
+    // 1. 优化依赖预构建（强制预构建，避免动态导入扫描） 优化冷启动、热更新
     optimizeDeps: {
         include: [
             'vue',
             'vue-router',
             'pinia',
+            // '@tiptap/core',        // Tiptap 核心
+            // '@tiptap/vue-3',       // Vue 集成
+            // '@tiptap/starter-kit', // 基础扩展集
+
             // 在这里列出你的核心依赖，让 vite 提前预构建
         ],
         exclude: [], // 排除不需要预构建的依赖
-        esbuildOptions: {
-            sourcemap: true,
-        },
+
     },
 
     // 2. 限制 Vite 的文件扫描范围（关键！）
@@ -66,10 +74,17 @@ export default defineConfig({
             ],
         },
     },
+
     build: {
         cssCodeSplit: true, //css自动拆分，禁用全打包css
         chunkSizeWarningLimit: 1500, //chunk警告阈值KB
-
+        terserOptions: {
+            compress: {
+                drop_console: true, //删除console，线上瘦身
+                drop_debugger: true
+            }
+        },
+        minify: "terser",
         rollupOptions: {
             treeshake: true,
             output: {
@@ -93,6 +108,22 @@ export default defineConfig({
                     // UI库
                     if (id.includes('node_modules/element-plus')) {
                         return 'ui'
+                    }
+                    // Tiptap 编辑器相关（最大的一个独立 chunk）
+                    if (id.includes('node_modules/@tiptap')) {
+                        return 'tiptap'
+                    }
+                    // 语法高亮（大体积，极少变化）
+                    if (id.includes('node_modules/lowlight') || id.includes('node_modules/highlight.js')) {
+                        return 'highlight'
+                    }
+                    // Yjs 协作相关
+                    if (id.includes('node_modules/yjs') || id.includes('node_modules/y-')) {
+                        return 'collab'
+                    }
+                    // 图片压缩库
+                    if (id.includes('node_modules/browser-image-compression')) {
+                        return 'img-compress'
                     }
 
                 }

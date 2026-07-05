@@ -25,7 +25,7 @@ interface ApiError {
 }
 
 // 统一响应类型
-interface ApiResponse<T = any> {
+export interface ApiResponse<T = any> {
   code: string | number;
   message: string;
   data: T;
@@ -39,7 +39,7 @@ class Ofetch {
   }
 
   // ==================== GET ====================
-  async get<T, V>(url: string, options: GetOptions = {}): Promise<T | V> {
+  async get<T, V>(url: string, options: GetOptions = {}): Promise<T|V> {
     const { params, retryCount = 3 } = options;
     let fullUrl = this.baseUrl + url;
 
@@ -62,19 +62,19 @@ class Ofetch {
   }
 
   // ==================== POST ====================
-  async post<T, V>(url: string, options: RequestOptions = {}): Promise<T | V> {
+  async post<T,V>(url: string, options: RequestOptions = {}): Promise<T|V> {
     const { retryCount = 3 } = options;
     return this.executeWithRetry(() => this.request("POST", url, options), retryCount);
   }
 
   // ==================== DELETE ====================
-  async delete<T, V>(url: string, options: RequestOptions = {}): Promise<T | V> {
+  async delete<T,V>(url: string, options: RequestOptions = {}): Promise<T|V> {
     const { retryCount = 3 } = options;
     return this.executeWithRetry(() => this.request("DELETE", url, options), retryCount);
   }
 
   // ==================== PATCH ====================
-  async patch<T, V>(url: string, options: RequestOptions = {}): Promise<T | V> {
+  async patch<T,V>(url: string, options: RequestOptions = {}): Promise<T|V> {
     const { retryCount = 3 } = options;
     return this.executeWithRetry(() => this.request("PATCH", url, options), retryCount);
   }
@@ -153,7 +153,7 @@ class Ofetch {
   }
 
   // ==================== 统一响应解析 ====================
-  private async handleResponse(res: Response): Promise<ApiResponse> {
+  private async handleResponse<T = any>(res: Response): Promise<T> {
     try {
       const data = await res.json();
       

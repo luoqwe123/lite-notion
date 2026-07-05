@@ -24,7 +24,7 @@ export interface LoginResponse {
     };
 }
 
-export function login(data: loginDataType): Promise<ApiResponse<LoginResponse>> {
+export function login(data: loginDataType): Promise<ApiResponse<LoginResponse>|any> {
     try {
         // 参数验证
         if (!data.email || !data.password) {
@@ -35,7 +35,7 @@ export function login(data: loginDataType): Promise<ApiResponse<LoginResponse>> 
             throw new Error('登录类型必须是password或code');
         }
         
-        return request.post<LoginResponse, ApiResponse>(API.LOGIN_URL, {
+        return request.post<ApiResponse<LoginResponse>,any>(API.LOGIN_URL, {
             htype: "form",
             body: data,
             retryCount: 2 // 登录操作重试次数不宜过多

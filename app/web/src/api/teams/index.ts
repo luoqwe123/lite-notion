@@ -20,9 +20,9 @@ export interface TeamListResponse {
     data: TeamMember[];
 }
 
-export function findAll(): Promise<ApiResponse<TeamListResponse>> {
+export function findAll(): Promise<ApiResponse<TeamListResponse>|any> {
     try {
-        return request.get<TeamListResponse, ApiResponse>(API.FINDALL_URL, {
+        return request.get<ApiResponse<TeamListResponse>,any>(API.FINDALL_URL, {
             retryCount: 3
         });
     } catch (error) {

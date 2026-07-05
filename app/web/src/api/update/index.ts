@@ -17,7 +17,7 @@ export interface UploadResponse {
     };
 }
 
-export function uploadImg(file: Blob): Promise<ApiResponse<UploadResponse>> {
+export function uploadImg(file: Blob): Promise<ApiResponse<UploadResponse>|any> {
     try {
         // 参数验证
         if (!(file instanceof Blob)) {
@@ -36,7 +36,7 @@ export function uploadImg(file: Blob): Promise<ApiResponse<UploadResponse>> {
             throw new Error('不支持的文件类型，仅支持JPEG、PNG、GIF、WebP格式');
         }
         
-        return request.post<UploadResponse, ApiResponse>(API.UPLOAD_IMAGE, {
+        return request.post<ApiResponse<UploadResponse>,any>(API.UPLOAD_IMAGE, {
             htype: "formData",
             body: { file },
             retryCount: 2 // 上传操作重试次数不宜过多

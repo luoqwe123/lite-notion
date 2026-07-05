@@ -21,7 +21,7 @@
         "src/**/*.tsx",
         "src/**/*.vue",
         "src/**/*.d.ts"
-    ],
+, "src/composables/useHashColor.ts"    ],
     "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.spec.ts"],
     "references": [
         {

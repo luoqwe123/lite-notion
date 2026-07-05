@@ -24,14 +24,18 @@ declare module 'vue' {
     ElMenu: typeof import('element-plus/es')['ElMenu']
     ElMenuItem: typeof import('element-plus/es')['ElMenuItem']
     ElSubMenu: typeof import('element-plus/es')['ElSubMenu']
+    Header: typeof import('./src/components/base/Header.vue')['default']
+    HeaderExample: typeof import('./src/components/base/HeaderExample.vue')['default']
     LoginFrom: typeof import('./src/components/LoginFrom/index.vue')['default']
     NavigationBar: typeof import('./src/components/NavigationBar.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     ShowEditor: typeof import('./src/components/ShowEditor/index.vue')['default']
     ShowIcon: typeof import('./src/components/showIcon.vue')['default']
+    Test: typeof import('./src/components/Tiptap/test.vue')['default']
     ThemeToggle: typeof import('./src/components/ThemeToggle.vue')['default']
     Tiptap: typeof import('./src/components/Tiptap/Tiptap.vue')['default']
     Toolbar: typeof import('./src/components/Tiptap/Toolbar/index.vue')['default']
+    Wind: typeof import('./src/components/wind/index.vue')['default']
   }
 }
